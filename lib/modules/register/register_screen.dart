@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qute_app/shared/components/components.dart';
-import 'package:sqflite/sqflite.dart';
+// import 'package:sqflite/sqflite.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
