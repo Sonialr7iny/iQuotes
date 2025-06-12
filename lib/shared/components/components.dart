@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 Widget defaultButton({
@@ -32,6 +31,8 @@ Widget defaultTextFormField({
   Function? onChanged,
   Widget? suffixIcon,
   Widget? prefixIcon,
+  TextEditingController? controller,
+  // TextEditingController? controller,
 }) => Padding(
   padding: const EdgeInsets.all(10.0),
   child: TextFormField(
@@ -55,7 +56,7 @@ Widget defaultTextFormField({
   ),
 );
 
-Widget txtButtun({
+Widget txtButton({
   required String txt,
   required String txtBtn,
   required VoidCallback onPressed,

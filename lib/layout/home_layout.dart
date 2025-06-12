@@ -40,6 +40,8 @@ class _HomeLayoutState extends State<HomeLayout> {
 
   ];
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,22 +59,25 @@ class _HomeLayoutState extends State<HomeLayout> {
         child: Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(
+
         type: BottomNavigationBarType.fixed,
         elevation: 20.0,
         currentIndex: currentIndex,
         onTap: (index) {
           setState(() {
             currentIndex = index;
-            print(index);
+
           });
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.format_quote_outlined),
+            activeIcon: Icon(Icons.format_quote),
+            icon: Icon(Icons.format_quote_outlined,),
             label: 'Quotes',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_outline_sharp),
+            activeIcon: Icon(Icons.favorite),
+            icon: Icon(Icons.favorite_outline),
             label: 'Favorites',
           ),
         ],

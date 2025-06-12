@@ -22,7 +22,7 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           defaultTextFormField(label: 'Password'),
           defaultButton(title: 'Sign In', onPressed: (){}),
-          txtButtun(txt:'You do not have an account,', txtBtn:'Register',onPressed: (){
+          txtButton(txt:'You do not have an account,', txtBtn:'Register',onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterScreen()));
           })
         ],
