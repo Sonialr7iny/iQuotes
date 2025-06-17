@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qute_app/modules/favorites/favorites_screen.dart';
+import 'package:qute_app/quotes_sqflite.dart';
+
 
 import '../modules/quotes/quotes_screen.dart';
 
@@ -11,6 +14,7 @@ class HomeLayout extends StatefulWidget {
 }
 
 class _HomeLayoutState extends State<HomeLayout> {
+  QuotesDb quotesDb=QuotesDb();
   int currentIndex = 0;
   List<Widget> screens = [
     QuotesScreen(),
@@ -54,7 +58,24 @@ class _HomeLayoutState extends State<HomeLayout> {
         ],
       ),
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-      floatingActionButton: FloatingActionButton(onPressed: () {},
+      floatingActionButton: FloatingActionButton(onPressed: ()async {
+        if(kDebugMode){
+          print('Attempting to fetch users .....');
+          try{
+            List<Map<String,dynamic>> users=await quotesDb.getAllRows('users');
+            if(users.isEmpty){
+              print('No users found in the database');
+            }else{
+              print('The users are:');
+              for(var userMap in users){
+                print('Username:${userMap['user_name']},Password:${userMap['password_hash']}');
+              }
+            }
+          }catch(e){
+            print('Error fetching users :$e');
+          }
+        }
+      },
         shape: StadiumBorder(),
         child: Icon(Icons.add),
       ),
