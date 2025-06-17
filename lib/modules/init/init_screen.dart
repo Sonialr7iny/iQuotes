@@ -51,11 +51,11 @@ class _InitScreenState extends State<InitScreen> {
           ),
 
           defaultButton(
-              title: 'Register',
-              onPressed: () {
+              text: 'Register',
+              function: () {
                 Navigator.pushNamed(context, '/register');
           }),
-          defaultButton(title: 'Sign In', onPressed: () {
+          defaultButton(text: 'Sign In', function: () {
               Navigator.pushNamed(context, '/signIn');
                      }),
         ],
