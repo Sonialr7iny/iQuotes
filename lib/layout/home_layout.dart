@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:qute_app/modules/favorites/favorites_screen.dart';
 import 'package:qute_app/quotes_sqflite.dart';
 import 'package:qute_app/shared/components/components.dart';
-
-import '../models/quote_model.dart';
 import '../modules/quotes/quotes_screen.dart';
 
 class HomeLayout extends StatefulWidget {

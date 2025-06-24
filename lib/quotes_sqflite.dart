@@ -46,41 +46,6 @@ if (kDebugMode) {
 }
   }
 
- //  readData(String sql)async{
- //    Database? db=await database;
- //    List<Map> response=await db!.rawQuery(sql);
- //    if (kDebugMode) {
- //      print('selected Done');
- //    }
- //    return response;
- //
- //  }
- //  insertData(String sql)async{
- //    Database? db=await database;
- //    int response=await db!.rawInsert(sql);
- //    if (kDebugMode) {
- //      print('insert Done');
- //    }
- //    return response;
- //  }
- // updateData(String sql)async{
- //    Database? db=await database;
- //    int response=await db!.rawUpdate(sql);
- //    if (kDebugMode) {
- //      print('update Done');
- //    }
- //    return response;
- //  }
- //  deleteData(String sql)async{
- //    Database? db=await database;
- //    int response=await db!.rawDelete(sql);
- //    if (kDebugMode) {
- //      print('deleted Done');
- //    }
- //    return response;
- //  }
-
-  // Secure Insert (using a Map and model)
   Future<int> insertModelData(String table, Map<String, dynamic> data) async {
     Database? db = await database;
     // conflictAlgorithm.ignore will not insert if a unique constraint is violated (e.g., username)
