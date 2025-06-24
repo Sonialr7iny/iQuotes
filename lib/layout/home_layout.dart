@@ -132,7 +132,15 @@ class _HomeLayoutState extends State<HomeLayout> {
                   ),
                 ),
               ),
-            );
+            ).closed.then((value){
+              if(mounted){
+                isBottomSheetShown = false;
+                setState(() {
+                  fabIcon=Icons.edit;
+
+                });
+              }
+            });
             isBottomSheetShown = true;
             setState(() {
               fabIcon=Icons.add;
