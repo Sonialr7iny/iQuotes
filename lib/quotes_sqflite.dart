@@ -33,9 +33,11 @@ class QuotesDb{
     await database.execute('''
     CREATE TABLE user_quotes (
     quote_id INTEGER PRIMARY KEY AUTOINCREMENT , 
+    user_id INTEGER NOT NULL,
     quote_text TEXT NOT NULL,
     author TEXT NOT NULL,
-    user_id INTEGER NOT NULL,
+    is_favorite INTEGER DEFAULT 0,
+    is_archived INTEGER DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
     )
     '''
@@ -91,15 +93,6 @@ if (kDebugMode) {
 
   Future<void> executeRawCommand(String sql, [List<dynamic>? arguments]) async { // For rawInsert, rawUpdate, rawDelete
     Database? db = await database;
-    // For rawInsert, you'd specifically call db.rawInsert if you need its return value behavior.
-    // This is a generic command executor for simplicity here.
-    // For rawInsert: return await db!.rawInsert(sql, arguments);
-    // For rawUpdate: return await db!.rawUpdate(sql, arguments);
-    // For rawDelete: return await db!.rawDelete(sql, arguments);
-    // This example just executes, might not be suitable for all raw commands directly
-    // if you need specific return types from rawInsert etc.
-    // A better approach for raw commands would be separate methods like:
-    // Future<int> executeRawInsert(String sql, List<dynamic> arguments) async { ... db.rawInsert ... }
     return await db!.execute(sql, arguments); // db.execute is for non-query SQL
   }
 Future <bool> doesUserNameExist(String userName)async{
@@ -129,5 +122,53 @@ Future <UserModel?> getUserByUsername(String username) async{
     return null; //User not found
 }
 
+Future<UserModel?> getUserById(int userId)async{
+    Database? db=await database;
+    if(db==null) return null;
+
+    final List<Map<String,dynamic>> maps=await db.query(
+      'users',
+      where: 'user_id=?',
+      whereArgs: [userId],
+      limit: 1,
+    );
+    if(maps.isNotEmpty){
+      return UserModel.fromMap(maps.first);
+    }
+    return null;
+}
+
+Future<List<Map<String,dynamic>>> getQuotesByUserId(int userId)async{
+    final db=await database;
+    return await db!.query('user_quotes',
+     where: 'user_id=?',
+      whereArgs: [userId],
+    );
+}
+
+Future<int>updateUserQuote(UserQuoteModel quote)async{
+    final db=await database;
+    return await db!.update(
+      'user_quotes',
+      quote.toMap(),
+      where: 'quote_id=?AND user_id=?',
+      whereArgs: [quote.quoteId,quote.userId],
+    );
+}
+
+Future<int>deleteUserQuote(UserQuoteModel quote)async{
+    final db=await database;
+    if(db==null){
+      if (kDebugMode) {
+        print('Database not initialized . Cannot delete quote.');
+      }
+      return 0;
+    }
+    return await db.delete(
+      'user_quotes',
+      where: 'quote_id=? AND user_id=?',
+      whereArgs: [quote.quoteId,quote.userId],
+    );
+}
 
 }

@@ -24,23 +24,50 @@ class UserModel {
 
 class UserQuoteModel {
   final int? quoteId;
-  final int? userId; // Foreign key to User
-  final String? quoteText;
+  final int userId; // Foreign key to User
+  final String quoteText;
   final String? author;
+  final bool isFavorite;
+  final bool isArchived;
 
   UserQuoteModel({
     this.quoteId,
     required this.userId,
     required this.quoteText,
     required this.author,
+    this.isFavorite = false,
+    this.isArchived = false,
   });
 
-  factory UserQuoteModel.fromMap(Map<String, dynamic> map) {
+  UserQuoteModel copyWith({
+    int? quoteId,
+    int? userId,
+    String? quoteText,
+    String? author,
+    bool? isFavorite,
+    bool? isArchived,
+  }) {
     return UserQuoteModel(
-      quoteId: map['quote_id'] as int,
+      quoteId: quoteId ?? this.quoteId,
+      userId: userId ?? this.userId,
+      quoteText: quoteText ?? this.quoteText,
+      author: author ?? this.author,
+      isFavorite: isFavorite ?? this.isFavorite,
+      isArchived: isArchived ?? this.isArchived,
+    );
+  }
+
+  factory UserQuoteModel.fromMap(Map<String, dynamic> map) {
+    if(map['user_id']==null||map['quote_text']==null){
+      throw FormatException("User ID or Quote text cannot be null from database.");
+    }
+    return UserQuoteModel(
+      quoteId: map['quote_id'] as int?,
       userId: map['user_id'] as int,
       quoteText: map['quote_text'] as String,
-      author: map['author'] as String,
+      author: map['author'] as String?,
+      isFavorite: (map['is_favorite'] as int?) == 1,
+      isArchived: (map['is_archived'] as int?) == 1,
     );
   }
 
@@ -50,6 +77,8 @@ class UserQuoteModel {
       'user_id': userId,
       'quote_text': quoteText,
       'author': author,
+      'is_favorite': isFavorite ? 1 : 0,
+      'is_archived': isArchived ? 1 : 0,
     };
   }
 }

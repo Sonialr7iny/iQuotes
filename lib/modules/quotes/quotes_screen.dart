@@ -1,14 +1,58 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qute_app/shared/components/components.dart';
+import 'package:qute_app/shared/cubit/cubit.dart';
+import 'package:qute_app/shared/cubit/states.dart';
 
 class QuotesScreen extends StatelessWidget {
   const QuotesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Quotes',style: TextStyle(
-        fontWeight: FontWeight.bold
-      ),),
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (BuildContext context,AppStates state) {
+        if (kDebugMode) {
+          print('Hello consumer in Quote Screen !!!!!------');
+        }
+      },
+      builder: (BuildContext context,AppStates state) {
+        if(kDebugMode){
+          print('Builder in Qute Screen ====================. ');
+        }
+        AppCubit cubit = AppCubit.get(context);
+        var quotes = cubit.displayedQuotes;
+        if (state is AppGetDatabaseLoadingState) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (quotes.isEmpty) {
+          return const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.format_quote_outlined,
+                  size: 100,
+                  color: Colors.grey,
+                ),
+                Text(
+                  'No quotes yet!',
+                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return Center(
+          child: ListView.separated(
+            itemBuilder: (context, index) => buildQuoteItems(quotes[index],context),
+            separatorBuilder: (context, index) => SizedBox(height: 5),
+            itemCount: quotes.length,
+          ),
+        );
+      },
     );
+
   }
 }
