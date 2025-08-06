@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           '/signIn':(context)=>SignInWithCubitScreen(),
           '/homelayout':(context)=>HomeLayoutWithCubit(),
           '/archived':(context)=>ArchivedScreen(),
-          '/signOut':(context)=>SignOutScreen(),
+          // '/signOut':(context)=>SignOutScreen(),
         },
         home:BlocConsumer<AppCubit,AppStates>(
           listener: (BuildContext listenerContext,AppStates state) {

@@ -6,9 +6,11 @@ import 'package:qute_app/shared/cubit/cubit.dart';
 import 'package:qute_app/shared/cubit/states.dart';
 import '../models/quote_model.dart';
 
-class HomeLayoutWithCubit extends StatelessWidget {
-  const HomeLayoutWithCubit({super.key});
 
+class HomeLayoutWithCubit extends StatelessWidget {
+ const HomeLayoutWithCubit({super.key});
+ // final _scaffoldKey = GlobalKey<ScaffoldState>();
+ // final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
@@ -32,10 +34,80 @@ class HomeLayoutWithCubit extends StatelessWidget {
                   if(kDebugMode){
                     print('Navigate to sing out .');
                   }
+                  showDialog(context: context, builder: (context) {
+                    return AlertDialog(
+                      title: Text('Confirm Account Deletion',style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: [
+                            Text('Are you sure you want to sign out?'),
+                            SizedBox(
+                              height: 8.0,
+                            ),
+                          ],
+                        ),
+                      ),
+                      actions: [
+                        TextButton(onPressed: (){
+                          Navigator.pop(context);
+                        }, child: Text('Cancel')),
+                        TextButton(
+                          // style:TextButton.styleFrom(foregroundColor:Colors.red),
+                            onPressed: (){
+                            cubit.logout();
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/signIn',
+                                  (Route<dynamic> route) => false,
+                            );
+                            },
+                            child: Text('SIGN OUT'),
+                        ),
+                      ],
+                    );
+                  },);
+                  
                 }
                 if(value=='delete account'){
                   if(kDebugMode){
                     print('Navigate to Delete account.');
+                    showDialog(context: context, builder: (context) {
+                      return AlertDialog(
+                        title: Text('Confirm Account Deletion'),
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: [
+                              Text('Are you sure you want to permanently delete your account?'),
+                              SizedBox(
+                                height: 8.0,
+                              ),
+                              Text('This will erase all your data, including all your quotes. This action cannot be undone.',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          TextButton(onPressed: (){
+                            Navigator.pop(context);
+                          }, child: Text('Cancel')),
+                          TextButton(
+                            style:TextButton.styleFrom(foregroundColor:Colors.red),
+                            onPressed: (){
+                              cubit.deleteCurrentUserAccount();
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/welcome',
+                                    (Route<dynamic> route) => false,
+                              );
+                            },
+                            child: Text('DELETE MY ACCOUNT'),
+                          ),
+                        ],
+                      );
+                    },);
                   }
                 }
               },

@@ -84,7 +84,16 @@ if (kDebugMode) {
     Database? db = await database;
     return await db!.delete(table, where: whereClause, whereArgs: whereArgs);
   }
+Future<void> deleteUser (int userId)async{
+    int deletedQuoteCount=await deleteModelData(
+      "users",
+      'user_id=?',
+      [userId],);
+    if (kDebugMode) {
+      print('Deleted $deletedQuoteCount quotes for user ID: $userId');
+    }
 
+}
   // Keep rawQuery for complex queries, but ensure arguments are passed separately
   Future<List<Map<String, dynamic>>> executeRawQuery(String sql, [List<dynamic>? arguments]) async {
     Database? db = await database;

@@ -5,28 +5,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qute_app/models/quote_model.dart';
 import 'package:qute_app/shared/cubit/cubit.dart';
 import 'package:qute_app/shared/cubit/states.dart';
-
 import '../../shared/components/components.dart';
 
 // import 'package:sqflite/sqflite.dart';
 
-class RegisterWithCubitScreen extends StatelessWidget {
+class RegisterWithCubitScreen extends StatefulWidget {// IF THAT DOSE NOT WORK I WILL REPUT IT AS BEFORE AS STATELESSWIDGET
 
-  // late final TextEditingController? nameController;
-  // late final TextEditingController? passController;
-  final GlobalKey<FormState> _formState = GlobalKey();
-  // final bool isPassword = true;
+
+  const RegisterWithCubitScreen({super.key});
+
+  @override
+  State<RegisterWithCubitScreen> createState() => _RegisterWithCubitScreenState();
+}
+
+class _RegisterWithCubitScreenState extends State<RegisterWithCubitScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final RegExp passwordRegex = RegExp(
     r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$',
   );
-  // final QuotesDb quotesDb = QuotesDb();
 
-  RegisterWithCubitScreen({super.key});
   // void dispose(){
-  //   AppCubit.get(context).nameController.dispose();
-  //   AppCubit.get(context).passController.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit,AppStates>(
@@ -40,7 +38,7 @@ class RegisterWithCubitScreen extends StatelessWidget {
             child: Center(
               child: SingleChildScrollView(
                 child: Form(
-                  key: _formState,
+                  key: _formKey,
                   child: Column(
                     // mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -79,6 +77,7 @@ class RegisterWithCubitScreen extends StatelessWidget {
                             return 'Password must not be empty';
                           } else if (!passwordRegex.hasMatch(value)) {
                             return 'Password must be at least 8+ chars,letters & digits';
+
                           }
                           return null;
                         },
@@ -90,7 +89,7 @@ class RegisterWithCubitScreen extends StatelessWidget {
                           if(kDebugMode){
                             print('====================OnButton Pressed');
                           }
-                          if (_formState.currentState?.validate()??false) {
+                          if (_formKey.currentState?.validate()??false) {
                             String currentUsername = cubit.nameController.text;
                             bool usernameExists = await cubit.userNameExist(currentUsername);
                             if (usernameExists) {

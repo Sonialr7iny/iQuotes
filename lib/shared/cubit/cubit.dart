@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qute_app/shared/cubit/states.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../../models/quote_model.dart';
 import '../../modules/favorites/favorites_screen.dart';
@@ -440,5 +441,24 @@ class AppCubit extends Cubit<AppStates> {
       emit(QuoteErrorState('Error deleting quote: ${e.toString()}'));
     }
  }
+
+ Future<void> deleteCurrentUserAccount()async{
+    try{
+      emit(AccountDeletionInProgressState());
+      if(currentUser==null){
+        emit(AccountDeletionFailureState('No authenticated user to delete.'));
+        return;
+      }
+      await quotesDb.deleteUser(currentUser as int);
+    }catch(e,s){
+      if(kDebugMode){
+        print('Error deleting user account: $e');
+        print(s);
+      }
+      emit(AccountDeletionFailureState('Failed to delete account: ${e.toString()}'));
+    }
+    
+ }
+
 
 }

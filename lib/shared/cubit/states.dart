@@ -62,3 +62,10 @@ class QuoteEditStartedState extends AppStates{
 class QuoteEditCancelledState extends AppStates{}
 
 class QuoteUpdateSuccessfulState extends AppStates{}
+
+class AccountDeletionInProgressState extends AppStates{}
+
+class AccountDeletionFailureState extends AppStates{
+  String error;
+  AccountDeletionFailureState(this.error);
+}

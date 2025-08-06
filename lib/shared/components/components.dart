@@ -110,6 +110,9 @@ Widget txtButton({
   ],
 );
 
+
+
+
 Widget buildQuoteItems(UserQuoteModel quoteModel, context) {
   AppCubit cubit = AppCubit.get(context);
   return Dismissible(
@@ -224,7 +227,7 @@ Widget buildQuoteItems(UserQuoteModel quoteModel, context) {
                   ),
                   IconButton(
                     onPressed: () {
-                      cubit.removeQuote(quoteModel);
+                      _showDeleteConfirmationDialog(context,quoteModel);
                     },
                     icon: Icon(Icons.delete_outline),
                   ),
@@ -304,7 +307,7 @@ Widget buildArchivedItems(UserQuoteModel quoteModel, context) {
                 children: [
                   IconButton(
                     onPressed: () {
-                      cubit.removeQuote(quoteModel);
+                      _showDeleteConfirmationDialog(context,quoteModel);
                     },
                     icon: Icon(Icons.delete_outline),
                   ),
@@ -316,10 +319,8 @@ Widget buildArchivedItems(UserQuoteModel quoteModel, context) {
       ),
     ),
     confirmDismiss: (direction) async {
-      if (direction == DismissDirection.endToStart) {
+      if (direction == DismissDirection.startToEnd) {
         return true;
-      } else if (direction == DismissDirection.startToEnd) {
-        return false;
       }
       return false;
     },
@@ -337,3 +338,144 @@ Widget buildArchivedItems(UserQuoteModel quoteModel, context) {
     },
   );
 }
+
+Widget buildFavoritesItems(UserQuoteModel quoteModel, context) {
+  AppCubit cubit = AppCubit.get(context);
+  return Padding(
+    padding: const EdgeInsets.all(3.0),
+    child: Card(
+      margin: EdgeInsets.all(2.0),
+      surfaceTintColor: Colors.white60,
+      child: Padding(
+        padding: const EdgeInsets.all(3.0),
+        child: Column(
+          children: [
+            ListTile(
+              title: Text(
+                quoteModel.quoteText,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              dense: true,
+              subtitle: Text(quoteModel.author ?? 'UnKnown author' ,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              isThreeLine: true,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    cubit.toggleFavoriteStatus(quoteModel);
+                  },
+                  icon:
+                  quoteModel.isFavorite
+                      ? Icon(Icons.favorite,color: Colors.cyan,)
+                      : Icon(Icons.favorite_border),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    cubit.startEditingQuote(quoteModel);
+                    cubit.scaffoldKey.currentState?.showBottomSheet(
+                          (context) => Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Form(
+                          key: cubit.formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              defaultFormField(
+                                controller: cubit.quoteController,
+                                type: TextInputType.text,
+                                text: 'Quote',
+                                validate: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Quote must not be empty';
+                                  }
+                                  return null;
+                                },
+                                prefix: Icons.format_quote,
+                              ),
+                              SizedBox(height: 15.0),
+                              defaultFormField(
+                                type: TextInputType.text,
+                                controller: cubit.authorController,
+                                text: 'Author',
+                                validate: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Author must not be empty';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                    if (cubit.isBottomSheetShown) {
+                      if (cubit.formKey.currentState!.validate()) {
+                        if (kDebugMode) {
+                          print(
+                            'Update Icon onPressed =============-----------==. ',
+                          );
+                        }
+                        cubit.changeBottomSheetState(
+                          isShow: false,
+                          icon: Icons.edit,
+                        );
+
+                        cubit.quoteController.clear();
+                        cubit.authorController.clear();
+                        if (!cubit.isBottomSheetShown) {}
+                      }
+                    }
+                  },
+                  icon: Icon(Icons.edit),
+                ),
+                IconButton(
+                  onPressed: () {
+                    _showDeleteConfirmationDialog(context,quoteModel);
+                  },
+                  icon: Icon(Icons.delete_outline),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Future<void> _showDeleteConfirmationDialog(BuildContext context,UserQuoteModel quoteModel)async{
+  AppCubit cubit = AppCubit.get(context);
+
+  return showDialog(context: context, builder: (BuildContext dialogContext) {
+    return AlertDialog(
+      title: Text('Confirm Delete'),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: [
+            Text('Are you sure you want to delete?!'),
+            Text('This action cannot to undone.'),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: (){
+          Navigator.of(dialogContext).pop();
+        }, child: Text('Cancel'),),
+        TextButton(onPressed: (){
+
+          cubit.removeQuote(quoteModel);
+          Navigator.of(dialogContext).pop();
+        }, child: Text('Delete'),)
+      ],
+    );
+  },);
+}
+
