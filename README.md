@@ -34,8 +34,8 @@ A Flutter application for saving and managing your favorite quotes locally. Buil
 1.  **App Name:** iQuotes.
 2.  **BCrypt Package:** bcrypt: ^1.1.3.
 3.  **Screenshots:** 
-    *   Welcome Screen ![welcome_screen](https://github.com/Sonialr7iny/iQuotes/blob/master/Screenshot_welcome.png)
-    *   Register Screen ![register_screen](https://github.com/Sonialr7iny/iQuotes/blob/master/Screenshot_register.png)
+    *   Welcome Screen ![welcome_screen](https://github.com/Sonialr7iny/iQuotes/blob/master/screenshots/Screenshot_welcome.png)
+    *   Register Screen ![register_screen](https://github.com/Sonialr7iny/iQuotes/blob/master/screenshots/Screenshot_register.png)
     *   Main Quote List Screen ![quotes_screen](https://github.com/Sonialr7iny/iQuotes/blob/master/screenshots/Screenshot_iquotes.png)
     *   Favorites Screen ![favorite_screen](https://github.com/Sonialr7iny/iQuotes/blob/master/screenshots/Screenshot_favorites.png)
     *   Archived Screen ![archived_screen](https://github.com/Sonialr7iny/iQuotes/blob/master/screenshots/Screenshot_more.png)
