@@ -106,13 +106,19 @@ class AppCubit extends Cubit<AppStates> {
   Future<void> _tryAutoLogin()async{
     final prefs=await SharedPreferences.getInstance();
     final int? userId=prefs.getInt('current_user_id');
-    print('READING User ID from prefs:$userId');
+    if (kDebugMode) {
+      print('READING User ID from prefs:$userId');
+    }
 
     if(userId!=null){
       emit(UserLoadingState());
-      print('Attempting to fetch user with ID: $userId from DB for auto-login');
+      if (kDebugMode) {
+        print('Attempting to fetch user with ID: $userId from DB for auto-login');
+      }
       UserModel? userFromDb=await quotesDb.getUserById(userId);
-      print('User fetched for auto-login: ${userFromDb?.userName}');
+      if (kDebugMode) {
+        print('User fetched for auto-login: ${userFromDb?.userName}');
+      }
       if(userFromDb!=null){
         currentUser=userFromDb;
         await loadUserQuotes();
@@ -240,7 +246,9 @@ class AppCubit extends Cubit<AppStates> {
         if (user.userId != null) {
           currentUser = user;
           final prefs=await SharedPreferences.getInstance();
-          print('SAVING User ID :${user.userId}');
+          if (kDebugMode) {
+            print('SAVING User ID :${user.userId}');
+          }
           await prefs.setInt('current_user_id', user.userId!);
 
           await loadUserQuotes();

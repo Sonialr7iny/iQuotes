@@ -2,7 +2,6 @@ import 'package:bcrypt/bcrypt.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path/path.dart';
 import 'package:qute_app/models/quote_model.dart';
 import 'package:qute_app/shared/cubit/cubit.dart';
 import 'package:qute_app/shared/cubit/states.dart';
