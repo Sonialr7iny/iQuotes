@@ -37,6 +37,6 @@ A Flutter application for saving and managing your favorite quotes locally. Buil
     *   Welcome Screen ![welcome_screen](https://github.com/Sonialr7iny/iQuotes/blob/master/Screenshot_welcome.png)
     *   Register Screen ![register_screen](https://github.com/Sonialr7iny/iQuotes/blob/master/Screenshot_register.png)
     *   Main Quote List Screen ![quotes_screen](https://github.com/Sonialr7iny/iQuotes/blob/master/Screenshot_iquotes.png)
-    *   Favorites Screen ![favorite_screen](https://github.com/Sonialr7iny/iQuotes/blob/master/Screenshot_favorites.png)
+    *   Favorites Screen ![favorite_screen](https://github.com/Sonialr7iny/iQuotes/blob/master/screenshots/Screenshot_favorites.png)
     *   Archived Screen ![archived_screen]([master/screenshots](https://github.com/Sonialr7iny/iQuotes/blob/master/Screenshot_more.png)
 
