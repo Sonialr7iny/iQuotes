@@ -9,7 +9,7 @@ A Flutter application for saving and managing your favorite quotes locally. Buil
     *   Password hashing using BCrypt for enhanced security.
     *   Login system with session persistence (using `shared_preferences`).
 *   **Quote Management:**
-    *   Browse and view a collection of quotes.
+    *   Browse and view a collection of quotes.sh
     *   Save quotes to your personal collection.
     *   Mark quotes as "Favorites" for quick access.
     *   Archive quotes you want to keep but separate from your main list.
