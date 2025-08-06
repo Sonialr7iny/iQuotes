@@ -1,4 +1,4 @@
- ![iquotes](master/screenshots/iqutes_app.png)
+ ![iquotes]([master/screenshots/iqutes_app.png](https://github.com/Sonialr7iny/iQuotes/blob/master/screenshots/iqutes_app.png))
 
 A Flutter application for saving and managing your favorite quotes locally. Built with a focus on clean state management using Bloc/Cubit and secure local data storage with SQLite.
 
