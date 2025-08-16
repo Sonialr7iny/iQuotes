@@ -6,7 +6,6 @@ import 'package:qute_app/modules/archive/archived_screen.dart';
 import 'package:qute_app/modules/init/welcome_screen.dart';
 import 'package:qute_app/modules/login/sign_in_with_cubit.dart';
 import 'package:qute_app/modules/register/register_with_cubit.dart';
-import 'package:qute_app/modules/sign_out/sign_out_screen.dart';
 import 'package:qute_app/modules/splash_screen/splash_screen.dart';
 import 'package:qute_app/shared/cubit/cubit.dart';
 import 'package:qute_app/shared/cubit/states.dart';
@@ -45,7 +44,6 @@ class MyApp extends StatelessWidget {
           '/signIn':(context)=>SignInWithCubitScreen(),
           '/homelayout':(context)=>HomeLayoutWithCubit(),
           '/archived':(context)=>ArchivedScreen(),
-          // '/signOut':(context)=>SignOutScreen(),
         },
         home:BlocConsumer<AppCubit,AppStates>(
           listener: (BuildContext listenerContext,AppStates state) {
