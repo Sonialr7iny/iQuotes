@@ -9,20 +9,18 @@ import 'package:qute_app/shared/cubit/states.dart';
 
 import '../../shared/cubit/cubit.dart';
 
-class SignInWithCubitScreen extends StatelessWidget {
+class SignInWithCubitScreen extends StatefulWidget {
+
+  const SignInWithCubitScreen({super.key});
+
+  @override
+  State<SignInWithCubitScreen> createState() => _SignInWithCubitScreenState();
+}
+
+class _SignInWithCubitScreenState extends State<SignInWithCubitScreen> {
   final GlobalKey<FormState> _formState = GlobalKey();
 
-
-  SignInWithCubitScreen({super.key});
-
   // void initState() {
-  //   // super.initState();
-  //   nameController = TextEditingController();
-  //   passController = TextEditingController();
-  // }
-
-
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
