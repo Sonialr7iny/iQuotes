@@ -113,7 +113,11 @@ Widget txtButton({
 
 
 
+
 Widget buildQuoteItems(UserQuoteModel quoteModel, context) {
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+  var formKey = GlobalKey<FormState>();
+
   AppCubit cubit = AppCubit.get(context);
   return Dismissible(
     key: Key(quoteModel.quoteId.toString()),
@@ -168,11 +172,11 @@ Widget buildQuoteItems(UserQuoteModel quoteModel, context) {
                   IconButton(
                     onPressed: () async {
                       cubit.startEditingQuote(quoteModel);
-                      cubit.scaffoldKey.currentState?.showBottomSheet(
+                      scaffoldKey.currentState?.showBottomSheet(
                         (context) => Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Form(
-                            key: cubit.formKey,
+                            key: formKey,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -206,7 +210,7 @@ Widget buildQuoteItems(UserQuoteModel quoteModel, context) {
                         ),
                       );
                       if (cubit.isBottomSheetShown) {
-                        if (cubit.formKey.currentState!.validate()) {
+                        if (formKey.currentState!.validate()) {
                           if (kDebugMode) {
                             print(
                               'Update Icon onPressed =============-----------==. ',
@@ -263,6 +267,7 @@ Widget buildQuoteItems(UserQuoteModel quoteModel, context) {
 
 
 Widget buildArchivedItems(UserQuoteModel quoteModel, context) {
+
   AppCubit cubit = AppCubit.get(context);
   return Dismissible(
     key: Key(quoteModel.quoteId.toString()),
@@ -340,6 +345,9 @@ Widget buildArchivedItems(UserQuoteModel quoteModel, context) {
 }
 
 Widget buildFavoritesItems(UserQuoteModel quoteModel, context) {
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+  var formKey = GlobalKey<FormState>();
+
   AppCubit cubit = AppCubit.get(context);
   return Padding(
     padding: const EdgeInsets.all(3.0),
@@ -379,11 +387,11 @@ Widget buildFavoritesItems(UserQuoteModel quoteModel, context) {
                 IconButton(
                   onPressed: () async {
                     cubit.startEditingQuote(quoteModel);
-                    cubit.scaffoldKey.currentState?.showBottomSheet(
+                    scaffoldKey.currentState?.showBottomSheet(
                           (context) => Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Form(
-                          key: cubit.formKey,
+                          key: formKey,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -417,7 +425,7 @@ Widget buildFavoritesItems(UserQuoteModel quoteModel, context) {
                       ),
                     );
                     if (cubit.isBottomSheetShown) {
-                      if (cubit.formKey.currentState!.validate()) {
+                      if (formKey.currentState!.validate()) {
                         if (kDebugMode) {
                           print(
                             'Update Icon onPressed =============-----------==. ',

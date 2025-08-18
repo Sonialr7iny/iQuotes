@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qute_app/shared/cubit/states.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
 import '../../models/quote_model.dart';
 import '../../modules/favorites/favorites_screen.dart';
 import '../../modules/quotes/quotes_screen.dart';
@@ -59,8 +57,7 @@ class AppCubit extends Cubit<AppStates> {
       ],
     ),
   ];
-  var scaffoldKey = GlobalKey<ScaffoldState>();
-  var formKey = GlobalKey<FormState>();
+  // var scaffoldKey = GlobalKey<ScaffoldState>();
   bool isBottomSheetShown = false;
   IconData fabIcon = Icons.edit;
   TextEditingController quoteController = TextEditingController();
@@ -364,7 +361,7 @@ class AppCubit extends Cubit<AppStates> {
       archivedUserQuotes =
           allUserQuotes
               .where(
-                (quote) => quote.isArchived == true && quote.isFavorite != true,
+                (quote) => quote.isArchived == true && quote.isFavorite != true||quote.isFavorite==true,
               )
               .toList();
       displayedQuotes =
@@ -459,6 +456,7 @@ class AppCubit extends Cubit<AppStates> {
     }
     
  }
+
 
 
 }
