@@ -64,7 +64,7 @@ class AppCubit extends Cubit<AppStates> {
       ],
     ),
   ];
-  // var scaffoldKey = GlobalKey<ScaffoldState>();
+
   bool isBottomSheetShown = false;
   IconData fabIcon = Icons.edit;
   TextEditingController quoteController = TextEditingController();
