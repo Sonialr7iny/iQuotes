@@ -9,13 +9,14 @@ import '../../shared/components/components.dart';
 
 // import 'package:sqflite/sqflite.dart';
 
-class RegisterWithCubitScreen extends StatefulWidget {// IF THAT DOSE NOT WORK I WILL REPUT IT AS BEFORE AS STATELESSWIDGET
-
+class RegisterWithCubitScreen extends StatefulWidget {
+  // IF THAT DOSE NOT WORK I WILL REPUT IT AS BEFORE AS STATELESSWIDGET
 
   const RegisterWithCubitScreen({super.key});
 
   @override
-  State<RegisterWithCubitScreen> createState() => _RegisterWithCubitScreenState();
+  State<RegisterWithCubitScreen> createState() =>
+      _RegisterWithCubitScreenState();
 }
 
 class _RegisterWithCubitScreenState extends State<RegisterWithCubitScreen> {
@@ -27,11 +28,10 @@ class _RegisterWithCubitScreenState extends State<RegisterWithCubitScreen> {
   // void dispose(){
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppCubit,AppStates>(
-      listener: (BuildContext context,AppStates state) {
-      },
-      builder: (BuildContext context,AppStates state) {
-        AppCubit cubit=AppCubit.get(context);
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (BuildContext context, AppStates state) {},
+      builder: (BuildContext context, AppStates state) {
+        AppCubit cubit = AppCubit.get(context);
         return Scaffold(
           body: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -47,9 +47,7 @@ class _RegisterWithCubitScreenState extends State<RegisterWithCubitScreen> {
                         'Create Account',
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
-                      SizedBox(
-                        height: 30.0,
-                      ),
+                      SizedBox(height: 30.0),
                       defaultFormField(
                         type: TextInputType.text,
                         controller: cubit.nameController,
@@ -66,7 +64,10 @@ class _RegisterWithCubitScreenState extends State<RegisterWithCubitScreen> {
                         controller: cubit.passController,
                         text: 'Password',
                         type: TextInputType.visiblePassword,
-                        suffix: cubit.isPassword ? Icons.visibility : Icons.visibility_off,
+                        suffix:
+                            cubit.isPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                         isPassword: cubit.isPassword,
                         suffixPressed: () {
                           cubit.passwordVisibility();
@@ -77,7 +78,6 @@ class _RegisterWithCubitScreenState extends State<RegisterWithCubitScreen> {
                             return 'Password must not be empty';
                           } else if (!passwordRegex.hasMatch(value)) {
                             return 'Password must be at least 8+ chars,letters & digits';
-
                           }
                           return null;
                         },
@@ -86,12 +86,14 @@ class _RegisterWithCubitScreenState extends State<RegisterWithCubitScreen> {
 
                       defaultButton(
                         function: () async {
-                          if(kDebugMode){
+                          if (kDebugMode) {
                             print('====================OnButton Pressed');
                           }
-                          if (_formKey.currentState?.validate()??false) {
+                          if (_formKey.currentState?.validate() ?? false) {
                             String currentUsername = cubit.nameController.text;
-                            bool usernameExists = await cubit.userNameExist(currentUsername);
+                            bool usernameExists = await cubit.userNameExist(
+                              currentUsername,
+                            );
                             if (usernameExists) {
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -112,7 +114,7 @@ class _RegisterWithCubitScreenState extends State<RegisterWithCubitScreen> {
                                 BCrypt.gensalt(),
                               );
                               UserModel newUser = UserModel(
-                                userName:currentUsername,
+                                userName: currentUsername,
                                 hashPassword: hashedPassword,
                               );
                               Map<String, dynamic> userMap = newUser.toMap();
@@ -129,11 +131,17 @@ class _RegisterWithCubitScreenState extends State<RegisterWithCubitScreen> {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('Registration successful !'),
+                                      content: Text(
+                                        'Registration successful !',
+                                      ),
                                     ),
                                   );
                                   // Navigator.pushReplacementNamed(context, '/homelayout');
-                                  Navigator.pushNamedAndRemoveUntil(context, '/homelayout', (Route<dynamic>route)=>false);
+                                  Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    '/homelayout',
+                                    (Route<dynamic> route) => false,
+                                  );
                                 }
                               } else {
                                 if (kDebugMode) {
@@ -144,8 +152,8 @@ class _RegisterWithCubitScreenState extends State<RegisterWithCubitScreen> {
                                     SnackBar(
                                       content: Text(
                                         usernameExists
-                                            ?'Username "$currentUsername" is already taken.'
-                                            :'Registration failed. Please try again ',
+                                            ? 'Username "$currentUsername" is already taken.'
+                                            : 'Registration failed. Please try again ',
                                       ),
                                     ),
                                   );
@@ -199,5 +207,3 @@ class _RegisterWithCubitScreenState extends State<RegisterWithCubitScreen> {
     );
   }
 }
-
-

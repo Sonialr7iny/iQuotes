@@ -6,22 +6,21 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.cyan,
+      backgroundColor: Colors.white,
       body: SizedBox(
         width: double.infinity,
         child: Column(
          mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
-            Icon(
-                Icons.format_quote_sharp,
-                size: 100.0,
-                color: Colors.white),
+           SizedBox(width:300,
+        height: 200,
+        child: Image.asset('images/logo_quote.png')),
             SizedBox(
               height: 25.0,
             ),
             CircularProgressIndicator(
-              color: Colors.white,
+              color: Colors.cyan,
               // backgroundColor: Colors.cyan,
 
             ),

@@ -26,14 +26,16 @@ class QuotesScreen extends StatelessWidget {
           return Center(child: CircularProgressIndicator());
         }
         if (quotes.isEmpty) {
-          return const Center(
+          return  Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.format_quote_outlined,
-                  size: 100,
-                  color: Colors.grey,
+                Container(
+                  width: 60,
+                  height: 60,
+                  child: Image.asset(
+                    'images/logo_quote.png'
+                  ),
                 ),
                 Text(
                   'No quotes yet!',

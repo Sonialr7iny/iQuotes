@@ -15,8 +15,8 @@ class HomeLayoutWithCubit extends StatefulWidget {
 }
 
 class _HomeLayoutWithCubitState extends State<HomeLayoutWithCubit> {
- final _scaffoldKey = GlobalKey<ScaffoldState>();
- final _formKey = GlobalKey<FormState>();
+ // final _scaffoldKey = GlobalKey<ScaffoldState>();
+ // final _formKey = GlobalKey<FormState>();
 @override
 void dispose(){
     super.dispose();
@@ -31,7 +31,7 @@ void dispose(){
         AppCubit cubit = AppCubit.get(context);
 
         return Scaffold(
-          key: _scaffoldKey,
+          key: cubit.scaffoldKey,
           appBar: AppBar(
             title: cubit.titles[cubit.currentIndex],
             elevation:2 ,
@@ -43,7 +43,7 @@ void dispose(){
                   }
 
                 if(value=='sign out'){
-                  if(cubit.isBottomSheetShown&&_scaffoldKey.currentState!=null){
+                  if(cubit.isBottomSheetShown&&cubit.scaffoldKey.currentState!=null){
                     Navigator.pop(context);
                   }
 
@@ -86,7 +86,7 @@ void dispose(){
 
                 }
                 if(value=='delete account'){
-                  if(cubit.isBottomSheetShown&&_scaffoldKey.currentState!=null){
+                  if(cubit.isBottomSheetShown&&cubit.scaffoldKey.currentState!=null){
                     Navigator.pop(context);
                   }
                   if(kDebugMode){
@@ -131,6 +131,7 @@ void dispose(){
                     },);
                   }
                 }
+
               },
                 itemBuilder: (context) => [
                   PopupMenuItem(value: 'archived',child:Text('Archived') ,),
@@ -144,7 +145,7 @@ void dispose(){
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
               if (cubit.isBottomSheetShown) {
-                if (_formKey.currentState!.validate()) {
+                if (cubit.formKey.currentState!.validate()) {
                   if(cubit.isEditingQuote){
                     await cubit.saveUpdatedQuote();
                   }else{
@@ -171,14 +172,14 @@ void dispose(){
                   cubit.quoteController.clear();
                   cubit.authorController.clear();
                 }
-                if(context.mounted &&_scaffoldKey.currentState!=null){
-                  _scaffoldKey.currentState
+                if(context.mounted &&cubit.scaffoldKey.currentState!=null){
+                  cubit.scaffoldKey.currentState
                       ?.
                   showBottomSheet(
                         (context) => Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Form(
-                        key: _formKey,
+                        key: cubit.formKey,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [

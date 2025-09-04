@@ -12,12 +12,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       body: Center(
         child: Column(
           // crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
+            Container(width: 250,
+                height: 250,
+                child: Image.asset('images/logo_quote.png',fit: BoxFit.cover,)),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -25,8 +29,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Text(
                   'i',
                   style: TextStyle(
-                    color: Colors.cyan,
-                    fontSize: 50.0,
+                    color: Colors.cyan[700],
+                    fontSize: 40.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -34,13 +38,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   'Quotes',
                   style: TextStyle(
                     color: Colors.black87,
-                    fontSize: 50.0,
+                    fontSize: 40.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 Icon(
                   Icons.format_quote,
-                  color: Colors.cyan,
+                  color: Colors.cyan[700],
                   size: 35.0,
                 ),
 

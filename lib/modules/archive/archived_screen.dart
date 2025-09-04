@@ -24,7 +24,7 @@ class ArchivedScreen extends StatelessWidget {
                   Text(
                     'i',
                     style: TextStyle(
-                      color: Colors.cyan,
+                      color: Colors.cyan[700],
                       fontWeight: FontWeight.bold,
                       fontSize: 25.0,
                     ),

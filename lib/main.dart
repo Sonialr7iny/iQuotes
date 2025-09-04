@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
           splashFactory: InkSplash.splashFactory,
           bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            selectedItemColor: Colors.cyan,
+            selectedItemColor: Colors.cyan[700],
             // unselectedItemColor: Colors.grey,
           )
 

@@ -25,7 +25,7 @@ import 'package:qute_app/shared/cubit/cubit.dart';
 
 Widget defaultButton({
   double width = double.infinity,
-  Color background = Colors.cyan,
+  // Color background = Colors.cyan[700],
   bool isUppercase = true,
   required VoidCallback function,
   required String text,
@@ -45,7 +45,7 @@ Widget defaultButton({
     ),
 
     child: MaterialButton(
-      color: background,
+      color: Colors.cyan[700],
       minWidth: double.infinity,
       height: 55.0,
       elevation: 0.0,
@@ -110,13 +110,9 @@ Widget txtButton({
   ],
 );
 
-
-
-
-
 Widget buildQuoteItems(UserQuoteModel quoteModel, context) {
-  var scaffoldKey = GlobalKey<ScaffoldState>();
-  var formKey = GlobalKey<FormState>();
+  // var scaffoldKey = GlobalKey<ScaffoldState>();
+  // var formKey = GlobalKey<FormState>();
 
   AppCubit cubit = AppCubit.get(context);
   return Dismissible(
@@ -137,137 +133,172 @@ Widget buildQuoteItems(UserQuoteModel quoteModel, context) {
     child: Padding(
       padding: const EdgeInsets.all(3.0),
       child: Card(
-        margin: EdgeInsets.all(2.0),
+        // elevation: 0.0,
+        // margin: EdgeInsets.all(2.0),
         surfaceTintColor: Colors.white60,
-        child: Padding(
-          padding: const EdgeInsets.all(3.0),
-          child: Column(
-            children: [
-              ListTile(
-                title: Text(
-                  quoteModel.quoteText,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                dense: true,
-                subtitle: Text(quoteModel.author ?? 'UnKnown author' ,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                ),
-                ),
-                isThreeLine: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular((12.0))),
+              child: Image.asset(
+                'images/card_design.png',
+                width: double.infinity,
+                height: null,
+                // fit: BoxFit.cover,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      cubit.toggleFavoriteStatus(quoteModel);
-                    },
-                    icon:
-                        quoteModel.isFavorite
-                            ? Icon(Icons.favorite,color: Colors.cyan,)
-                            : Icon(Icons.favorite_border),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: Text(
+                    quoteModel.quoteText,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  IconButton(
-                    onPressed: () async {
-                      cubit.startEditingQuote(quoteModel);
-                      scaffoldKey.currentState?.showBottomSheet(
-                        (context) => Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Form(
-                            key: formKey,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                defaultFormField(
-                                  controller: cubit.quoteController,
-                                  type: TextInputType.text,
-                                  text: 'Quote',
-                                  validate: (value) {
-                                    if (value.isEmpty) {
-                                      return 'Quote must not be empty';
-                                    }
-                                    return null;
-                                  },
-                                  prefix: Icons.format_quote,
-                                ),
-                                SizedBox(height: 15.0),
-                                defaultFormField(
-                                  type: TextInputType.text,
-                                  controller: cubit.authorController,
-                                  text: 'Author',
-                                  validate: (value) {
-                                    if (value.isEmpty) {
-                                      return 'Author must not be empty';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ],
+                  dense: true,
+                  subtitle: Text(
+                    quoteModel.author ?? 'UnKnown author',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                  ),
+                  isThreeLine: true,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    // Favorites Icon ---------
+                    IconButton(
+                      onPressed: () {
+                        cubit.toggleFavoriteStatus(quoteModel);
+                      },
+                      icon:
+                          quoteModel.isFavorite
+                              ? Icon(Icons.favorite, color: Colors.cyan[700])
+                              : Icon(Icons.favorite_border),
+                    ),
+                    // For Edit
+                    IconButton(
+                      onPressed: () async {
+                        cubit.startEditingQuote(quoteModel);
+                        // final GlobalKey<FormState> bottomSheetFormKey=GlobalKey<FormState>();
+                        cubit.scaffoldKey.currentState?.showBottomSheet(
+                          (context) => Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Form(
+                              key: cubit.formKey,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  defaultFormField(
+                                    controller: cubit.quoteController,
+                                    type: TextInputType.text,
+                                    text: 'Quote',
+                                    validate: (value) {
+                                      if (value.isEmpty) {
+                                        return 'Quote must not be empty';
+                                      }
+                                      return null;
+                                    },
+                                    prefix: Icons.format_quote,
+                                  ),
+                                 const SizedBox(height: 15.0),
+                                  defaultFormField(
+                                    type: TextInputType.text,
+                                    controller: cubit.authorController,
+                                    text: 'Author',
+                                    validate: (value) {
+                                      if (value.isEmpty) {
+                                        return 'Author must not be empty';
+                                      }
+                                      return null;
+                                    },
+                                    prefix: Icons.person
+                                  ),
+                                  // const SizedBox(
+                                  //   height: 20.0,
+                                  // ),
+                                  // ElevatedButton(
+                                  //   onPressed: (){
+                                  //     if(cubit.formKey.currentState?.validate()??false){
+                                  //       cubit.startEditingQuote(quoteModel);
+                                  //       Navigator.pop(context);
+                                  //     }
+                                  //   }, child: const Text('Save Changes'),
+                                  // ),
+                                  // const SizedBox(
+                                  //   height: 10.0,
+                                  // ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                      if (cubit.isBottomSheetShown) {
-                        if (formKey.currentState!.validate()) {
-                          if (kDebugMode) {
-                            print(
-                              'Update Icon onPressed =============-----------==. ',
-                            );
-                          }
-                          cubit.changeBottomSheetState(
-                            isShow: false,
-                            icon: Icons.edit,
-                          );
 
-                          cubit.quoteController.clear();
-                          cubit.authorController.clear();
-                          if (!cubit.isBottomSheetShown) {}
+                        );
+                        if (cubit.isBottomSheetShown) {
+                          if (cubit.formKey.currentState!.validate()) {
+                            if (kDebugMode) {
+                              print(
+                                'Update Icon onPressed =============-----------==. ',
+                              );
+                            }
+                            cubit.changeBottomSheetState(
+                              isShow: false,
+                              icon: Icons.edit,
+                            );
+
+                            cubit.quoteController.clear();
+                            cubit.authorController.clear();
+                            if (!cubit.isBottomSheetShown) {}
+                          }
                         }
-                      }
-                    },
-                    icon: Icon(Icons.edit),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      _showDeleteConfirmationDialog(context,quoteModel);
-                    },
-                    icon: Icon(Icons.delete_outline),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                      },
+                      icon: Icon(Icons.edit),
+                    ),
+                    // Delete Icon
+                    IconButton(
+                      onPressed: () {
+                        _showDeleteConfirmationDialog(context, quoteModel);
+                      },
+                      icon: Icon(Icons.delete_outline),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     ),
     confirmDismiss: (direction) async {
-      if (direction == DismissDirection.endToStart) {
-        return true;
-      } else if (direction == DismissDirection.startToEnd) {
+      if (quoteModel.isFavorite != true) {
+        if (direction == DismissDirection.endToStart) {
+          return true;
+        } else if (direction == DismissDirection.startToEnd) {
+          return false;
+        }
         return false;
       }
-      return false;
+      return null;
     },
     onDismissed: (direction) {
-        cubit.toggleArchiveStatus(quoteModel);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              quoteModel.isArchived
-                  ? "'${quoteModel.quoteText}'unarchived"
-                  : "'${quoteModel.quoteText}'archived",
-            ),
+      cubit.toggleArchiveStatus(quoteModel);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            quoteModel.isArchived
+                ? "'${quoteModel.quoteText}'unarchived"
+                : "'${quoteModel.quoteText}'archived",
           ),
-        );
+        ),
+      );
     },
   );
 }
 
-
 Widget buildArchivedItems(UserQuoteModel quoteModel, context) {
-
   AppCubit cubit = AppCubit.get(context);
   return Dismissible(
     key: Key(quoteModel.quoteId.toString()),
@@ -287,39 +318,52 @@ Widget buildArchivedItems(UserQuoteModel quoteModel, context) {
     child: Padding(
       padding: const EdgeInsets.all(3.0),
       child: Card(
-        margin: EdgeInsets.all(2.0),
         surfaceTintColor: Colors.white60,
-        child: Padding(
-          padding: const EdgeInsets.all(3.0),
-          child: Column(
-            children: [
-              ListTile(
-                title: Text(
-                  quoteModel.quoteText,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                dense: true,
-                subtitle: Text(quoteModel.author ?? 'UnKnown author' ,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                isThreeLine: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular((12.0))),
+              child: Image.asset(
+                'images/card_design.png',
+                width: double.infinity,
+                height: null,
+                // fit: BoxFit.cover,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      _showDeleteConfirmationDialog(context,quoteModel);
-                    },
-                    icon: Icon(Icons.delete_outline),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: Text(
+                    quoteModel.quoteText,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                ],
-              ),
-            ],
-          ),
+                  dense: true,
+                  subtitle: Text(
+                    quoteModel.author ?? 'UnKnown author',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                  ),
+                  isThreeLine: true,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                // Delete
+                IconButton(
+                  onPressed: () {
+                    _showDeleteConfirmationDialog(context, quoteModel);
+                  },
+                  icon: Icon(Icons.delete_outline),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     ),
@@ -345,145 +389,166 @@ Widget buildArchivedItems(UserQuoteModel quoteModel, context) {
 }
 
 Widget buildFavoritesItems(UserQuoteModel quoteModel, context) {
-  var scaffoldKey = GlobalKey<ScaffoldState>();
-  var formKey = GlobalKey<FormState>();
+  // var scaffoldKey = GlobalKey<ScaffoldState>();
+  // var formKey = GlobalKey<FormState>();
 
   AppCubit cubit = AppCubit.get(context);
   return Padding(
     padding: const EdgeInsets.all(3.0),
     child: Card(
-      margin: EdgeInsets.all(2.0),
       surfaceTintColor: Colors.white60,
-      child: Padding(
-        padding: const EdgeInsets.all(3.0),
-        child: Column(
-          children: [
-            ListTile(
-              title: Text(
-                quoteModel.quoteText,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              dense: true,
-              subtitle: Text(quoteModel.author ?? 'UnKnown author' ,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              isThreeLine: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.circular(12.0),
+      ),
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(top: Radius.circular((12.0))),
+            child: Image.asset(
+              'images/card_design.png',
+              width: double.infinity,
+              height: null,
+              // fit: BoxFit.cover,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    cubit.toggleFavoriteStatus(quoteModel);
-                  },
-                  icon:
-                  quoteModel.isFavorite
-                      ? Icon(Icons.favorite,color: Colors.cyan,)
-                      : Icon(Icons.favorite_border),
+          ),
+          Column(
+            children: [
+              ListTile(
+                title: Text(
+                  quoteModel.quoteText,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                IconButton(
-                  onPressed: () async {
-                    cubit.startEditingQuote(quoteModel);
-                    scaffoldKey.currentState?.showBottomSheet(
-                          (context) => Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Form(
-                          key: formKey,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              defaultFormField(
-                                controller: cubit.quoteController,
-                                type: TextInputType.text,
-                                text: 'Quote',
-                                validate: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Quote must not be empty';
-                                  }
-                                  return null;
-                                },
-                                prefix: Icons.format_quote,
-                              ),
-                              SizedBox(height: 15.0),
-                              defaultFormField(
-                                type: TextInputType.text,
-                                controller: cubit.authorController,
-                                text: 'Author',
-                                validate: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Author must not be empty';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ],
-                          ),
+                dense: true,
+                subtitle: Text(
+                  quoteModel.author ?? 'UnKnown author',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                ),
+                isThreeLine: true,
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                onPressed: () {
+                  cubit.toggleFavoriteStatus(quoteModel);
+                },
+                icon:
+                    quoteModel.isFavorite
+                        ? Icon(Icons.favorite, color: Colors.cyan[700])
+                        : Icon(Icons.favorite_border),
+              ),
+              IconButton(
+                onPressed: () async {
+                  cubit.startEditingQuote(quoteModel);
+                  cubit.scaffoldKey.currentState?.showBottomSheet(
+                    (context) => Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Form(
+                        key: cubit.formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            defaultFormField(
+                              controller: cubit.quoteController,
+                              type: TextInputType.text,
+                              text: 'Quote',
+                              validate: (value) {
+                                if (value.isEmpty) {
+                                  return 'Quote must not be empty';
+                                }
+                                return null;
+                              },
+                              prefix: Icons.format_quote,
+                            ),
+                            SizedBox(height: 15.0),
+                            defaultFormField(
+                              type: TextInputType.text,
+                              controller: cubit.authorController,
+                              text: 'Author',
+                              validate: (value) {
+                                if (value.isEmpty) {
+                                  return 'Author must not be empty';
+                                }
+                                return null;
+                              },
+                                prefix: Icons.person,
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                    if (cubit.isBottomSheetShown) {
-                      if (formKey.currentState!.validate()) {
-                        if (kDebugMode) {
-                          print(
-                            'Update Icon onPressed =============-----------==. ',
-                          );
-                        }
-                        cubit.changeBottomSheetState(
-                          isShow: false,
-                          icon: Icons.edit,
+                    ),
+                  );
+                  if (cubit.isBottomSheetShown) {
+                    if (cubit.formKey.currentState!.validate()) {
+                      if (kDebugMode) {
+                        print(
+                          'Update Icon onPressed =============-----------==. ',
                         );
-
-                        cubit.quoteController.clear();
-                        cubit.authorController.clear();
-                        if (!cubit.isBottomSheetShown) {}
                       }
+                      cubit.changeBottomSheetState(
+                        isShow: false,
+                        icon: Icons.edit,
+                      );
+
+                      cubit.quoteController.clear();
+                      cubit.authorController.clear();
+                      if (!cubit.isBottomSheetShown) {}
                     }
-                  },
-                  icon: Icon(Icons.edit),
-                ),
-                IconButton(
-                  onPressed: () {
-                    _showDeleteConfirmationDialog(context,quoteModel);
-                  },
-                  icon: Icon(Icons.delete_outline),
-                ),
-              ],
-            ),
-          ],
-        ),
+                  }
+                },
+                icon: Icon(Icons.edit),
+              ),
+              IconButton(
+                onPressed: () {
+                  _showDeleteConfirmationDialog(context, quoteModel);
+                },
+                icon: Icon(Icons.delete_outline),
+              ),
+            ],
+          ),
+        ],
       ),
     ),
   );
 }
 
-Future<void> _showDeleteConfirmationDialog(BuildContext context,UserQuoteModel quoteModel)async{
+Future<void> _showDeleteConfirmationDialog(
+  BuildContext context,
+  UserQuoteModel quoteModel,
+) async {
   AppCubit cubit = AppCubit.get(context);
 
-  return showDialog(context: context, builder: (BuildContext dialogContext) {
-    return AlertDialog(
-      title: Text('Confirm Delete'),
-      content: SingleChildScrollView(
-        child: ListBody(
-          children: [
-            Text('Are you sure you want to delete?!'),
-            Text('This action cannot to undone.'),
-          ],
+  return showDialog(
+    context: context,
+    builder: (BuildContext dialogContext) {
+      return AlertDialog(
+        title: Text('Confirm Delete'),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: [
+              Text('Are you sure you want to delete?!'),
+              Text('This action cannot to undone.'),
+            ],
+          ),
         ),
-      ),
-      actions: [
-        TextButton(onPressed: (){
-          Navigator.of(dialogContext).pop();
-        }, child: Text('Cancel'),),
-        TextButton(onPressed: (){
-
-          cubit.removeQuote(quoteModel);
-          Navigator.of(dialogContext).pop();
-        }, child: Text('Delete'),)
-      ],
-    );
-  },);
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              cubit.removeQuote(quoteModel);
+              Navigator.of(dialogContext).pop();
+            },
+            child: Text('Delete'),
+          ),
+        ],
+      );
+    },
+  );
 }
-

@@ -17,6 +17,8 @@ class AppCubit extends Cubit<AppStates> {
 
   late TextEditingController nameController = TextEditingController();
   late TextEditingController passController = TextEditingController();
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+  var formKey = GlobalKey<FormState>();
   bool isPassword = true;
   late QuotesDb quotesDb ;
   int currentIndex = 0;
@@ -24,10 +26,15 @@ class AppCubit extends Cubit<AppStates> {
   final List<Widget> titles = [
     Row(
       children: [
+        // Container(
+        //   width: 30,
+        //   height: 30,
+        //   child: Image.asset('images/logo_quote.png'),
+        // )
         Text(
           'i',
           style: TextStyle(
-            color: Colors.cyan,
+            color: Colors.cyan[700],
             fontWeight: FontWeight.bold,
             fontSize: 25.0,
           ),
@@ -36,7 +43,7 @@ class AppCubit extends Cubit<AppStates> {
           'Quotes',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        Icon(Icons.format_quote, color: Colors.cyan, size: 29.0),
+        Icon(Icons.format_quote, color: Colors.cyan[700], size: 29.0),
       ],
     ),
     Row(
@@ -44,7 +51,7 @@ class AppCubit extends Cubit<AppStates> {
         Text(
           'i',
           style: TextStyle(
-            color: Colors.cyan,
+            color: Colors.cyan[700],
             fontWeight: FontWeight.bold,
             fontSize: 25.0,
           ),
@@ -53,7 +60,7 @@ class AppCubit extends Cubit<AppStates> {
           'Favorites',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        Icon(Icons.favorite, color: Colors.cyan, size: 22.0),
+        Icon(Icons.favorite, color: Colors.cyan[700], size: 22.0),
       ],
     ),
   ];
@@ -361,7 +368,7 @@ class AppCubit extends Cubit<AppStates> {
       archivedUserQuotes =
           allUserQuotes
               .where(
-                (quote) => quote.isArchived == true && quote.isFavorite != true||quote.isFavorite==true,
+                (quote) => quote.isArchived == true && quote.isFavorite != true,
               )
               .toList();
       displayedQuotes =
@@ -380,40 +387,6 @@ class AppCubit extends Cubit<AppStates> {
       emit(AppDatabaseErrorState(e.toString()));
     }
 
-    //     try{
-    //       final List<Map> allQuotes=await quotesDb.getAllRows(table);
-    //       newQuote.clear();
-    //       favorites.clear();
-    //       archive.clear();
-    //
-    //       for(var quote in allQuotes){
-    //         if(!isFavorite&&!isArchived){
-    //           newQuote.add(quote);
-    //
-    //
-    //         }
-    //         else if(isFavorite&&!isArchived){
-    //           favorites.add(quote);
-    //
-    //
-    //         }
-    //         else if(!isFavorite&&isArchived){
-    //           archive.add(quote);
-    //         }
-    //       }
-    //       if(kDebugMode){
-    //         print('CUBIT loadQuotes: :${newQuote.length},:${favorites.length},:${archive.length}');
-    //       }
-    //
-    //       emit(AppGetDatabaseState());
-    //     }catch(e,s){
-    //       if(kDebugMode){
-    //         print('Error loading tasks from DB : $e');
-    //         print('Stacktrace:$s');
-    //       }
-    //       emit(AppDatabaseErrorState(e.toString()));
-    //     }
-    // return null;
   }
 
  Future<void> removeQuote(UserQuoteModel quoteToDelete)async{
