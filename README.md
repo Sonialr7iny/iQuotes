@@ -60,9 +60,9 @@ iQuotes is a personal quotes manager app that lets users securely save, organize
 
 ## 📌 App Info
 
- **App Name**: iQuotes
+ - **App Name** : iQuotes
 
-**BCrypt Package**: bcrypt: ^1.1.3
+ - **BCrypt Package** : bcrypt: ^1.1.3
 
 ---
 
