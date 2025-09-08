@@ -71,6 +71,6 @@ flutter run
 
 ## 📌 App Info
 
-## *App Name: iQuotes
+ **App Name**: iQuotes
 
-## *BCrypt Package: bcrypt: ^1.1.3
+**BCrypt Package**: bcrypt: ^1.1.3
