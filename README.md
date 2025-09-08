@@ -46,17 +46,6 @@ iQuotes is a personal quotes manager app that lets users securely save, organize
 | Quotes List   | ![Quotes](screenshots/quotes_pic.png) |
 
 ---
-
-## 🏁 Getting Started
-
-```bash
-git clone https://github.com/Sonialr7iny/iQuotes.git
-cd iQuotes
-flutter pub get
-flutter run
-
----
-
 ## 🔮 Future Improvements
 
 🌙 Dark Mode support.
@@ -74,3 +63,16 @@ flutter run
  **App Name**: iQuotes
 
 **BCrypt Package**: bcrypt: ^1.1.3
+
+---
+
+## 🏁 Getting Started
+
+```bash
+git clone https://github.com/Sonialr7iny/iQuotes.git
+cd iQuotes
+flutter pub get
+flutter run
+
+---
+
