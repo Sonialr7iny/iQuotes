@@ -46,6 +46,14 @@ iQuotes is a personal quotes manager app that lets users securely save, organize
 | Quotes List   | ![Quotes](screenshots/quotes_pic.png) |
 
 ---
+## 📌 App Info
+
+ - **App Name** : iQuotes
+
+ - **BCrypt Package** : bcrypt: ^1.1.3
+   
+----
+
 ## 🔮 Future Improvements
 
 🌙 Dark Mode support.
@@ -55,14 +63,6 @@ iQuotes is a personal quotes manager app that lets users securely save, organize
 🎲 Quote of the Day: random quote generator from saved collection.
 
 ☁️ Optional cloud backup in the future.
-
----
-
-## 📌 App Info
-
- - **App Name** : iQuotes
-
- - **BCrypt Package** : bcrypt: ^1.1.3
 
 ---
 
