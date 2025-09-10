@@ -26,7 +26,7 @@ iQuotes is a personal quotes manager app that lets users securely save, organize
   - Clean and predictable state management using **Bloc/Cubit**.
 
 
-- **🌙 Dark Mode support.
+- **🌙 Dark Mode support**.
 
 ---
 
