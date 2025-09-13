@@ -1,40 +1,79 @@
- ![iquotes](images/logo_quote.png)
+# iQuotes 📖✨
 
-A Flutter application for saving and managing your favorite quotes locally. Built with a focus on clean state management using Bloc/Cubit and secure local data storage with SQLite.
+iQuotes is a personal quotes manager app that lets users securely save, organize, and revisit their favorite quotes — with authentication, password hashing, and local database storage for maximum privacy.
 
-## Features
-
-*   **User Authentication:**
-    *   Secure user registration with password validation (using regular expressions).
-    *   Password hashing using BCrypt for enhanced security.
-    *   Login system with session persistence (using `shared_preferences`).
-*   **Quote Management:**
-    *   Browse and view a collection of quotes.sh
-    *   Save quotes to your personal collection.
-    *   Mark quotes as "Favorites" for quick access.
-    *   Archive quotes you want to keep but separate from your main list.
-    *   Unarchive quotes to return them to your main collection.
-*   **Local Data Storage:**
-    *   All user data and quotes are stored locally and privately on the device using an SQLite database.
-*   **State Management:**
-    *   Clean and predictable state management implemented using the Bloc library (Cubit).
-
-## Tech Stack & Key Packages
-
-*   **Flutter & Dart:** Core framework and language.
-*   **State Management:** `flutter_bloc` / `Cubit`
-*   **Local Database:** `sqflite`
-*   **Secure Password Hashing:** `bcrypt`
-*   **Session Persistence:** `shared_preferences`
-*   **Form Validation:** (Implicitly through regular expressions and Flutter's Form widgets)
+![iQuotes Logo](images/logo_quote.png)
 
 ---
 
+## 🚀 Features
 
-1.  **App Name:** iQuotes.
-2.  **BCrypt Package:** bcrypt: ^1.1.3.
-3.  **Images of app :** 
-    *   Welcome Screen ![iQuotesApp](screenshots/quote1.png)
-    *   screen ![screen](screenshots/layout_quotes.png)
-    *   screen ![quotes_screen](screenshots/quotes_pic.png)
+- **User Authentication**
+  - Secure user registration with password validation (regular expressions).
+  - Password hashing using **BCrypt** for enhanced security.
+  - Login system with session persistence (`shared_preferences`).
+
+- **Quote Management**
+  - Save quotes with author names.
+  - Input validation → cannot add empty quotes or author names.
+  - Mark quotes as *Favorites* for quick access.
+  - Archive/unarchive quotes for better organization.
+
+- **Local Data Storage**
+  - All user data and quotes are stored privately on-device using SQLite.
+
+- **State Management**
+  - Clean and predictable state management using **Bloc/Cubit**.
+
+
+- **🌙 Dark Mode support**.
+
+---
+
+## 🛠️ Tech Stack & Key Packages
+- **Flutter & Dart** – core framework.
+- **State Management** – `flutter_bloc`
+- **Database** – `sqflite`
+- **Secure Password Hashing** – `bcrypt`
+- **Persistence** – `shared_preferences`
+- **Form Validation** – Flutter Forms + Regex
+
+---
+
+## 📱 Screenshots
+
+| Screen        | Image |
+|---------------|-------|
+| Welcome       | ![Welcome](screenshots/quote1.png) |
+| Quotes Layout | ![Layout](screenshots/layout_quotes.png) |
+| Quotes List   | ![Quotes](screenshots/quotes_pic.png) |
+
+---
+## 📌 App Info
+
+ - **App Name** : iQuotes
+
+ - **BCrypt Package** : bcrypt: ^1.1.3
+   
+----
+
+## 🔮 Future Improvements
+
+📤 Share quotes easily with friends (using share_plus).
+
+🎲 Quote of the Day: random quote generator from saved collection.
+
+☁️ Optional cloud backup in the future.
+
+---
+
+## 🏁 Getting Started
+
+```bash
+git clone https://github.com/Sonialr7iny/iQuotes.git
+cd iQuotes
+flutter pub get
+flutter run
+
+---
 
