@@ -15,6 +15,7 @@ class ArchivedScreen extends StatelessWidget {
       AppCubit.get(context).loadUserQuotes();
     });
       // BlocConsumer<AppCubit, AppStates>(
+    AppCubit cubit = AppCubit.get(context);
 
  return Scaffold(
             appBar: AppBar(
@@ -31,8 +32,10 @@ class ArchivedScreen extends StatelessWidget {
                   ),
                   Text(
                     'Archive',
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
+                    style:
+                    cubit.isDark
+                        ? TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
+                        : TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                   // Icon(Icons.archive, color: Colors.cyan, size:20.0),
                 ],
@@ -45,7 +48,6 @@ class ArchivedScreen extends StatelessWidget {
                   }
                 },
                 builder: (BuildContext context, AppStates state) {
-                  AppCubit cubit = AppCubit.get(context);
                   var archived = cubit.archivedUserQuotes;
                   if (state is AppGetDatabaseLoadingState) {
                     return Center(child: CircularProgressIndicator());
@@ -68,7 +70,7 @@ class ArchivedScreen extends StatelessWidget {
                 child: ListView.separated(
                   itemBuilder:
                       (context, index) =>
-                          buildArchivedItems(archived[index], context),
+                          buildQuoteItem(archived[index], context,QuoteScreenContext.archived),
                   separatorBuilder: (context, index) => SizedBox(height: 5.0),
                   itemCount: archived.length,
                 ),

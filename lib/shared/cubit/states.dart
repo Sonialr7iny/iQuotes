@@ -69,3 +69,5 @@ class AccountDeletionFailureState extends AppStates{
   String error;
   AccountDeletionFailureState(this.error);
 }
+
+class QuoteAppChangeModeState extends AppStates{}

@@ -29,7 +29,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Text(
                   'i',
                   style: TextStyle(
-                    color: Colors.cyan[700],
+                    color: Colors.cyan,
                     fontSize: 40.0,
                     fontWeight: FontWeight.w700,
                   ),
@@ -44,7 +44,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 Icon(
                   Icons.format_quote,
-                  color: Colors.cyan[700],
+                  color: Colors.cyan,
                   size: 35.0,
                 ),
 

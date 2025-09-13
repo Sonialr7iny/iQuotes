@@ -38,7 +38,7 @@ class FavoritesScreen extends StatelessWidget {
           return Center(
             child: ListView.separated(
               itemBuilder:
-                  (context, index) => buildFavoritesItems(favorite[index] , context),
+                  (context, index) => buildQuoteItem(favorite[index] , context,QuoteScreenContext.favorites),
               separatorBuilder: (context, index) => SizedBox(height: 5.0),
               itemCount: favorite.length,
             ),

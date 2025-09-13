@@ -9,8 +9,6 @@ import '../../modules/quotes/quotes_screen.dart';
 import '../../quotes_sqflite.dart';
 
 class AppCubit extends Cubit<AppStates> {
-
-
   UserModel? currentUser;
 
   UserModel? get currentUsers => currentUser;
@@ -20,10 +18,12 @@ class AppCubit extends Cubit<AppStates> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var formKey = GlobalKey<FormState>();
   bool isPassword = true;
-  late QuotesDb quotesDb ;
+  late QuotesDb quotesDb;
+
   int currentIndex = 0;
   final List<Widget> screens = [QuotesScreen(), FavoritesScreen()];
-  final List<Widget> titles = [
+
+  List<Widget> get titles => [
     Row(
       children: [
         // Container(
@@ -41,7 +41,11 @@ class AppCubit extends Cubit<AppStates> {
         ),
         Text(
           'Quotes',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style:
+              isDark
+                  ? TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
+                  : TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          // style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         Icon(Icons.format_quote, color: Colors.cyan[700], size: 29.0),
       ],
@@ -58,7 +62,11 @@ class AppCubit extends Cubit<AppStates> {
         ),
         Text(
           'Favorites',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style:
+          isDark
+              ? TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
+              : TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          // style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         Icon(Icons.favorite, color: Colors.cyan[700], size: 22.0),
       ],
@@ -77,7 +85,7 @@ class AppCubit extends Cubit<AppStates> {
 
   bool get isEditingQuote => quoteBeingEdited != null;
 
-  AppCubit() : super(AppInitialState()){
+  AppCubit() : super(AppInitialState()) {
     quotesDb = QuotesDb();
     _tryAutoLogin();
   }
@@ -108,34 +116,38 @@ class AppCubit extends Cubit<AppStates> {
       emit(ChangeBottomSheetState());
     }
   }
-  Future<void> _tryAutoLogin()async{
-    final prefs=await SharedPreferences.getInstance();
-    final int? userId=prefs.getInt('current_user_id');
+
+  Future<void> _tryAutoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final int? userId = prefs.getInt('current_user_id');
     if (kDebugMode) {
       print('READING User ID from prefs:$userId');
     }
 
-    if(userId!=null){
+    if (userId != null) {
       emit(UserLoadingState());
       if (kDebugMode) {
-        print('Attempting to fetch user with ID: $userId from DB for auto-login');
+        print(
+          'Attempting to fetch user with ID: $userId from DB for auto-login',
+        );
       }
-      UserModel? userFromDb=await quotesDb.getUserById(userId);
+      UserModel? userFromDb = await quotesDb.getUserById(userId);
       if (kDebugMode) {
         print('User fetched for auto-login: ${userFromDb?.userName}');
       }
-      if(userFromDb!=null){
-        currentUser=userFromDb;
+      if (userFromDb != null) {
+        currentUser = userFromDb;
         await loadUserQuotes();
         emit(AuthenticatedState(currentUser!));
-      }else{
+      } else {
         await prefs.remove('current_user_id');
         emit(UnauthenticatedState());
       }
-    }else{
+    } else {
       emit(UnauthenticatedState());
     }
   }
+
   void cancelEditQuote() {
     quoteBeingEdited = null;
     quoteController.clear();
@@ -167,7 +179,9 @@ class AppCubit extends Cubit<AppStates> {
     try {
       int result = await quotesDb.updateUserQuote(updatedQuote);
       if (result > 0) {
-        if (kDebugMode) print('Quote update successfully : ID${updatedQuote.quoteId}');
+        if (kDebugMode) {
+          print('Quote update successfully : ID${updatedQuote.quoteId}');
+        }
         await loadUserQuotes();
         quoteBeingEdited = null;
         emit(QuoteUpdateSuccessfulState());
@@ -208,7 +222,7 @@ class AppCubit extends Cubit<AppStates> {
         UserModel? registeredUser = await quotesDb.getUserById(result);
         if (registeredUser != null && registeredUser.userId != null) {
           currentUser = registeredUser;
-          final prefs=await SharedPreferences.getInstance();
+          final prefs = await SharedPreferences.getInstance();
           await prefs.setInt('current_user_id', registeredUser.userId!);
           await loadUserQuotes();
           emit(AuthenticatedState(registeredUser));
@@ -232,8 +246,8 @@ class AppCubit extends Cubit<AppStates> {
     return null;
   }
 
-  void logout() async{
-    final prefs=await SharedPreferences.getInstance();
+  void logout() async {
+    final prefs = await SharedPreferences.getInstance();
     await prefs.remove('current_user_id');
     currentUser = null;
     allUserQuotes.clear();
@@ -250,7 +264,7 @@ class AppCubit extends Cubit<AppStates> {
       if (user != null) {
         if (user.userId != null) {
           currentUser = user;
-          final prefs=await SharedPreferences.getInstance();
+          final prefs = await SharedPreferences.getInstance();
           if (kDebugMode) {
             print('SAVING User ID :${user.userId}');
           }
@@ -302,23 +316,22 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
-  Future<void> toggleArchiveStatus(UserQuoteModel quoteToToggle)async{
-    if(currentUser==null||currentUser!.userId==null){
+  Future<void> toggleArchiveStatus(UserQuoteModel quoteToToggle) async {
+    if (currentUser == null || currentUser!.userId == null) {
       emit(QuoteErrorState('Cannot toggle archive: User or Quote ID missing.'));
       return;
     }
-    UserQuoteModel updatedQuote=quoteToToggle.copyWith(
-      isArchived:!quoteToToggle.isArchived,
+    UserQuoteModel updatedQuote = quoteToToggle.copyWith(
+      isArchived: !quoteToToggle.isArchived,
     );
-    try{
-      int result=await quotesDb.updateUserQuote(updatedQuote);
-      if(result>0){
+    try {
+      int result = await quotesDb.updateUserQuote(updatedQuote);
+      if (result > 0) {
         await loadUserQuotes();
-      }else{
+      } else {
         emit(QuoteErrorState('Failed to update archive status in DB.'));
       }
-
-    }catch(e){
+    } catch (e) {
       emit(QuoteErrorState('Error toggling archive :${e.toString()}'));
     }
   }
@@ -386,50 +399,62 @@ class AppCubit extends Cubit<AppStates> {
       }
       emit(AppDatabaseErrorState(e.toString()));
     }
-
   }
 
- Future<void> removeQuote(UserQuoteModel quoteToDelete)async{
-    if(currentUser==null||currentUser!.userId==null){
+  Future<void> removeQuote(UserQuoteModel quoteToDelete) async {
+    if (currentUser == null || currentUser!.userId == null) {
       emit(QuoteErrorState('Cannot delete quote:User or Quote ID missing.'));
       return;
     }
-    if(quoteToDelete.userId!=currentUser!.userId){
+    if (quoteToDelete.userId != currentUser!.userId) {
       emit(QuoteErrorState('Unauthorized attempt to delete quote.'));
       return;
     }
-    try{
-      int result=await quotesDb.deleteUserQuote(quoteToDelete);
+    try {
+      int result = await quotesDb.deleteUserQuote(quoteToDelete);
 
-      if(result>0){
-        if(kDebugMode)print('Quote deleted successfully:ID${quoteToDelete.quoteId}');
+      if (result > 0) {
+        if (kDebugMode) {
+          print('Quote deleted successfully:ID${quoteToDelete.quoteId}');
+        }
         await loadUserQuotes();
-      }else{
-        emit(QuoteErrorState('Failed to delete quote from database.It might have already been removed'));
+      } else {
+        emit(
+          QuoteErrorState(
+            'Failed to delete quote from database.It might have already been removed',
+          ),
+        );
       }
-    }catch(e){
+    } catch (e) {
       emit(QuoteErrorState('Error deleting quote: ${e.toString()}'));
     }
- }
+  }
 
- Future<void> deleteCurrentUserAccount()async{
-    try{
+  Future<void> deleteCurrentUserAccount() async {
+    try {
       emit(AccountDeletionInProgressState());
-      if(currentUser==null){
+      if (currentUser == null) {
         emit(AccountDeletionFailureState('No authenticated user to delete.'));
         return;
       }
       await quotesDb.deleteUser(currentUser as int);
-    }catch(e,s){
-      if(kDebugMode){
+    } catch (e, s) {
+      if (kDebugMode) {
         print('Error deleting user account: $e');
         print(s);
       }
-      emit(AccountDeletionFailureState('Failed to delete account: ${e.toString()}'));
+      emit(
+        AccountDeletionFailureState(
+          'Failed to delete account: ${e.toString()}',
+        ),
+      );
     }
-    
- }
+  }
 
+  bool isDark = false;
 
-
+  void changeAppMode() {
+    isDark = !isDark;
+    emit(QuoteAppChangeModeState());
+  }
 }

@@ -30,10 +30,13 @@ class QuotesScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: 60,
                   height: 60,
-                  child: Image.asset(
+                  child:cubit.isDark?Image.asset(
+                      'images/logo_darkmode.png'
+                  ):
+                  Image.asset(
                     'images/logo_quote.png'
                   ),
                 ),
@@ -48,7 +51,7 @@ class QuotesScreen extends StatelessWidget {
 
         return Center(
           child: ListView.separated(
-            itemBuilder: (context, index) => buildQuoteItems(quotes[index],context),
+            itemBuilder: (context, index) => buildQuoteItem(quotes[index],context,QuoteScreenContext.quotes),
             separatorBuilder: (context, index) => SizedBox(height: 5),
             itemCount: quotes.length,
           ),

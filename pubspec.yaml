@@ -42,6 +42,7 @@ dependencies:
   bloc: ^9.0.0
   flutter_bloc: ^9.0.0
   shared_preferences: ^2.5.3
+  hexcolor: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +71,8 @@ flutter:
       - images/logo_quote.png
       - images/card_design.png
       - images/re_back.png
+      - images/cover_design.png
+      - images/logo_darkmode.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
