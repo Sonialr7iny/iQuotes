@@ -48,7 +48,7 @@ iQuotes is a personal quotes manager app that lets users securely save, organize
 | Welcome       | ![Welcome](screenshots/quote1.png) |
 | Quotes Layout | ![Layout](screenshots/layout_quotes.png) |
 | Quotes List   | ![Quotes](screenshots/quotes_pic.png) |
-| Dark & Light mode toggle  | ![Quotes](screenshots/iquots_dark_app.png) |
+| Dark & Light mode toggle  | ![Quotes](screenshots/iquotes_dark_app.png) |
 | Dark & Light mode toggle | ![Quotes](screenshots/dark_mode.png) |
 
 ---
