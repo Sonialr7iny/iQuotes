@@ -27,6 +27,7 @@ iQuotes is a personal quotes manager app that lets users securely save, organize
 
 
 - **🌙 Dark Mode support**.
+- A feature has been added to toggle between Light mode and Dark mode for the application interface, taking into account color contrast and eye comfort. Users can manually choose their preferred mode.
 
 ---
 
@@ -47,6 +48,8 @@ iQuotes is a personal quotes manager app that lets users securely save, organize
 | Welcome       | ![Welcome](screenshots/quote1.png) |
 | Quotes Layout | ![Layout](screenshots/layout_quotes.png) |
 | Quotes List   | ![Quotes](screenshots/quotes_pic.png) |
+| Dark & Light mode toggle  | ![Quotes](screenshots/iquots_dark.png) |
+| Dark & Light mode toggle | ![Quotes](screenshots/dark_mode.png) |
 
 ---
 ## 📌 App Info
