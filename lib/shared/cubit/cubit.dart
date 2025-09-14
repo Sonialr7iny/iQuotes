@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qute_app/shared/components/constants.dart';
 import 'package:qute_app/shared/cubit/states.dart';
+import 'package:qute_app/shared/network/local/cache_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/quote_model.dart';
 import '../../modules/favorites/favorites_screen.dart';
@@ -495,8 +496,16 @@ class AppCubit extends Cubit<AppStates> {
 
   bool isDark = false;
 
-  void changeAppMode() {
-    isDark = !isDark;
-    emit(QuoteAppChangeModeState());
+  void changeAppMode({bool? fromShared}) {
+    if(fromShared!=null) {
+      isDark=fromShared;
+    } else {
+      isDark = !isDark;
+    }
+    CacheHelper.putBoolean(key: 'isDark',value: isDark).then((value){
+      emit(QuoteAppChangeModeState());
+    });
+
+
   }
 }

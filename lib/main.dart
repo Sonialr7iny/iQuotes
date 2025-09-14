@@ -10,24 +10,29 @@ import 'package:qute_app/modules/register/register_with_cubit.dart';
 import 'package:qute_app/modules/splash_screen/splash_screen.dart';
 import 'package:qute_app/shared/cubit/cubit.dart';
 import 'package:qute_app/shared/cubit/states.dart';
+import 'package:qute_app/shared/network/local/cache_helper.dart';
 import 'package:qute_app/shared/styles/bloc_observer.dart';
 
 
-void main() {
+void main()async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const MyApp());
   Bloc.observer=MyBlocObserver();
+ await CacheHelper.init();
+bool? isDark=CacheHelper.getBoolean(key:'isDark');
+ runApp( MyApp(isDark!));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  final bool? isDark;
+  const MyApp( this.isDark, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AppCubit>(
-      create: (BuildContext providerContext)=>AppCubit()..loadUserQuotes(),
+      create: (BuildContext providerContext)=>AppCubit()..loadUserQuotes()..changeAppMode(
+        fromShared: isDark,
+      ),
       child: BlocConsumer<AppCubit,AppStates>(
         listener: (context, state) {
 
