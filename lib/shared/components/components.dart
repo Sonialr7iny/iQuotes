@@ -580,6 +580,353 @@ Future<void> _showDeleteConfirmationDialog(
 
 enum QuoteScreenContext { quotes, favorites, archived }
 
+class QuoteListItem extends StatefulWidget {
+  final UserQuoteModel quoteModel;
+  final BuildContext parentContext;
+  final QuoteScreenContext screenContext;
+
+  const QuoteListItem({
+    Key? key,
+    required this.quoteModel,
+    required this.parentContext,
+    required this.screenContext,
+}):super(key: key);
+  @override
+  _QuoteListItemState createState()=>_QuoteListItemState();
+}
+class _QuoteListItemState extends State<QuoteListItem>{
+  bool _isLocallyDismissed=false;
+
+  @override
+  Widget build(BuildContext context){
+    if(_isLocallyDismissed){
+      return SizedBox.shrink();
+    }
+    AppCubit cubit =AppCubit.get(widget.parentContext);
+    bool allowArchiveSwipe =
+        widget.screenContext == QuoteScreenContext.quotes && !widget.quoteModel.isFavorite;
+    bool allowUnarchiveSwipe =
+        widget.screenContext == QuoteScreenContext.archived && widget.quoteModel.isArchived;
+    bool showFavoriteAndEditeIcons = widget.screenContext != QuoteScreenContext.archived;
+
+    return Dismissible(
+      key: ValueKey<String>(widget.quoteModel.quoteId.toString()),
+      background:
+      (allowUnarchiveSwipe)
+          ? Container(
+        color: Colors.black87,
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Icon(Icons.unarchive, color: Colors.white60),
+      )
+          : (allowArchiveSwipe)
+          ? Container(color: Colors.transparent)
+          : null,
+
+      secondaryBackground:
+      (allowArchiveSwipe)
+          ? Container(
+        color: Colors.cyan[700],
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Icon(Icons.archive, color: Colors.white60),
+      )
+          : null,
+
+      // confirmDismiss: (direction) async {
+      //   // if (quoteModel.isFavorite != true) {
+      //   //   if (!enableSwiping&&quoteModel.isFavorite!=true) return false;
+      //   if (direction == DismissDirection.endToStart && allowArchiveSwipe) {
+      //     return true;
+      //   } else if (direction == DismissDirection.startToEnd &&
+      //       allowUnarchiveSwipe) {
+      //     return true;
+      //     // if(screenContext==QuoteScreenContext.archived&&quoteModel.isArchived){
+      //     //   return true;
+      //     // }
+      //   }
+      //   return false;
+      // },
+      // onDismissed: (direction) {
+      //   // if(!enableSwiping)return;
+      //   // if(screenContext==QuoteScreenContext.quotes)
+      //   if (direction == DismissDirection.endToStart && allowArchiveSwipe) {
+      //     cubit.toggleArchiveStatus(quoteModel);
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(
+      //         content: Text(
+      //           quoteModel.isArchived
+      //               ? "'${quoteModel.quoteText}'unarchived"
+      //               : "'${quoteModel.quoteText}'archived",
+      //         ),
+      //       ),
+      //     );
+      //   } else if (direction == DismissDirection.startToEnd &&
+      //       allowUnarchiveSwipe) {
+      //     //Fix it ----------------------------------
+      //     //----------- -------- --------
+      //     cubit.toggleArchiveStatus(quoteModel);
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(
+      //         content: Text(
+      //           quoteModel.isArchived
+      //               ? "'${quoteModel.quoteText}'unarchived"
+      //               : "'${quoteModel.quoteText}'archived",
+      //         ),
+      //       ),
+      //     );
+      //   }
+      // },
+      child: Padding(
+        padding: const EdgeInsets.all(3.0),
+        child: Card(
+          // elevation: 0.0,
+          // margin: EdgeInsets.all(2.0),
+          // surfaceTintColor: Colors.white60,
+          // shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.circular(12.0),
+          // ),
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular((12.0))),
+                child:
+                cubit.isDark
+                    ? Image.asset(
+                  'images/cover_design.png',
+                  width: double.infinity,
+                  // height: null,
+                  // fit: BoxFit.cover,
+                )
+                    : Image.asset(
+                  'images/card_design.png',
+                  width: double.infinity,
+                  // height: null,
+                  // fit: BoxFit.cover,
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: Text(
+                      widget.quoteModel.quoteText,
+                      // style: Theme.of(context).textTheme.bodyLarge,
+                      style:
+                      cubit.isDark
+                          ? TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      )
+                          : TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    dense: true,
+                    subtitle: Text(
+                     widget. quoteModel.author ?? 'UnKnown author',
+                      style:
+                      cubit.isDark
+                          ? TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                      )
+                          : TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                      ),
+                      // style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    isThreeLine: true,
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Favorites Icon ---------
+                      if (showFavoriteAndEditeIcons)
+                        IconButton(
+                          onPressed: () {
+                            cubit.toggleFavoriteStatus(widget.quoteModel);
+                          },
+                          icon:
+                          widget.quoteModel.isFavorite
+                              ? Icon(Icons.favorite, color: Colors.cyan[700])
+                              : Icon(Icons.favorite_border),
+                        ),
+                      // For Edit
+                      if (showFavoriteAndEditeIcons)
+                        IconButton(
+                          onPressed: () async {
+                            cubit.startEditingQuote(widget.quoteModel);
+                            // final GlobalKey<FormState> bottomSheetFormKey=GlobalKey<FormState>();
+                            cubit.scaffoldKey.currentState?.showBottomSheet(
+                                  (context) => Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Form(
+                                  key: cubit.formKey,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      defaultFormField(
+                                        controller: cubit.quoteController,
+                                        type: TextInputType.text,
+                                        text: 'Quote',
+                                        textStyle:
+                                        cubit.isDark
+                                            ? TextStyle(color: Colors.white)
+                                            : TextStyle(color: Colors.black),
+                                        validate: (value) {
+                                          if (value.isEmpty) {
+                                            return 'Quote must not be empty';
+                                          }
+                                          return null;
+                                        },
+                                        prefix: Icons.format_quote,
+                                      ),
+                                      const SizedBox(height: 15.0),
+                                      defaultFormField(
+                                        type: TextInputType.text,
+                                        controller: cubit.authorController,
+                                        text: 'Author',
+                                        textStyle:
+                                        cubit.isDark
+                                            ? TextStyle(
+                                          // fontSize: 20.0,
+                                          // fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        )
+                                            : TextStyle(
+                                          // fontSize: 20.0,
+                                          // fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                        validate: (value) {
+                                          if (value.isEmpty) {
+                                            return 'Author must not be empty';
+                                          }
+                                          return null;
+                                        },
+                                        prefix: Icons.person,
+                                      ),
+                                      // const SizedBox(
+                                      //   height: 20.0,
+                                      // ),
+                                      // ElevatedButton(
+                                      //   onPressed: (){
+                                      //     if(cubit.formKey.currentState?.validate()??false){
+                                      //       cubit.startEditingQuote(quoteModel);
+                                      //       Navigator.pop(context);
+                                      //     }
+                                      //   }, child: const Text('Save Changes'),
+                                      // ),
+                                      // const SizedBox(
+                                      //   height: 10.0,
+                                      // ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                            if (cubit.isBottomSheetShown) {
+                              if (cubit.formKey.currentState!.validate()) {
+                                if (kDebugMode) {
+                                  print(
+                                    'Update Icon onPressed =============-----------==. ',
+                                  );
+                                }
+                                cubit.changeBottomSheetState(
+                                  isShow: false,
+                                  icon: Icons.edit,
+                                );
+
+                                cubit.quoteController.clear();
+                                cubit.authorController.clear();
+                                if (!cubit.isBottomSheetShown) {}
+                              }
+                            }
+                          },
+                          icon: Icon(Icons.edit),
+                        ),
+
+                      // Delete Icon
+                      IconButton(
+                        onPressed: () {
+                          _showDeleteConfirmationDialog(context,widget.quoteModel);
+                        },
+                        icon: Icon(Icons.delete_outline),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      confirmDismiss: (direction) async {
+        if (direction == DismissDirection.endToStart && allowArchiveSwipe) {
+          return true;
+        } else if (direction == DismissDirection.startToEnd &&
+            allowUnarchiveSwipe) {
+          return true;
+        }
+        return false;
+      },
+      onDismissed: (direction)  {
+        setState(() {
+          _isLocallyDismissed=true;
+        });
+        // UserQuoteModel currentQuoteState=quoteModel;
+        if (direction == DismissDirection.endToStart && allowArchiveSwipe) {
+          print('Dismissible : Archiving quote ID ${widget.quoteModel.quoteId}');
+           cubit.toggleArchivedStatus(widget.quoteModel);
+          print(
+            'Dismissible: toggleArchiveStatus completed for ${widget.quoteModel.quoteId}',
+          );
+          Future.microtask(() {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    widget.quoteModel.isArchived
+                        ? "'${widget.quoteModel.quoteText}'unarchived"
+                        : "'${widget.quoteModel.quoteText}'archived",
+                  ),
+                ),
+              );
+            }
+          });
+        } else if (direction == DismissDirection.startToEnd &&
+            allowUnarchiveSwipe) {
+          print('Dismissible : Archiving quote ID ${widget.quoteModel.quoteId}');
+           cubit.toggleArchivedStatus(widget.quoteModel);
+          print(
+            'Dismissible: toggleArchiveStatus completed for ${widget.quoteModel.quoteId}',
+          );
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  widget.quoteModel.isArchived
+                      ? "'${widget.quoteModel.quoteText}'unarchived"
+                      : "'${widget.quoteModel.quoteText}'archived",
+                ),
+              ),
+            );
+          }
+        }
+      },
+    );
+  }
+}
+
 Widget buildQuoteItem(
   UserQuoteModel quoteModel,
   context,
@@ -715,15 +1062,18 @@ Widget buildQuoteItem(
                   dense: true,
                   subtitle: Text(
                     quoteModel.author ?? 'UnKnown author',
-                    style:cubit.isDark ? TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white,
-                    ):TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black,
-                    ),
+                    style:
+                        cubit.isDark
+                            ? TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            )
+                            : TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                            ),
                     // style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   isThreeLine: true,
@@ -745,98 +1095,98 @@ Widget buildQuoteItem(
                       ),
                     // For Edit
                     if (showFavoriteAndEditeIcons)
-                    IconButton(
-                      onPressed: () async {
-                        cubit.startEditingQuote(quoteModel);
-                        // final GlobalKey<FormState> bottomSheetFormKey=GlobalKey<FormState>();
-                        cubit.scaffoldKey.currentState?.showBottomSheet(
-                          (context) => Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Form(
-                              key: cubit.formKey,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  defaultFormField(
-                                    controller: cubit.quoteController,
-                                    type: TextInputType.text,
-                                    text: 'Quote',
-                                    textStyle:
-                                        cubit.isDark
-                                            ? TextStyle(color: Colors.white)
-                                            : TextStyle(color: Colors.black),
-                                    validate: (value) {
-                                      if (value.isEmpty) {
-                                        return 'Quote must not be empty';
-                                      }
-                                      return null;
-                                    },
-                                    prefix: Icons.format_quote,
-                                  ),
-                                  const SizedBox(height: 15.0),
-                                  defaultFormField(
-                                    type: TextInputType.text,
-                                    controller: cubit.authorController,
-                                    text: 'Author',
-                                    textStyle:
-                                        cubit.isDark
-                                            ? TextStyle(
-                                              // fontSize: 20.0,
-                                              // fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                            )
-                                            : TextStyle(
-                                              // fontSize: 20.0,
-                                              // fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                            ),
-                                    validate: (value) {
-                                      if (value.isEmpty) {
-                                        return 'Author must not be empty';
-                                      }
-                                      return null;
-                                    },
-                                    prefix: Icons.person,
-                                  ),
-                                  // const SizedBox(
-                                  //   height: 20.0,
-                                  // ),
-                                  // ElevatedButton(
-                                  //   onPressed: (){
-                                  //     if(cubit.formKey.currentState?.validate()??false){
-                                  //       cubit.startEditingQuote(quoteModel);
-                                  //       Navigator.pop(context);
-                                  //     }
-                                  //   }, child: const Text('Save Changes'),
-                                  // ),
-                                  // const SizedBox(
-                                  //   height: 10.0,
-                                  // ),
-                                ],
+                      IconButton(
+                        onPressed: () async {
+                          cubit.startEditingQuote(quoteModel);
+                          // final GlobalKey<FormState> bottomSheetFormKey=GlobalKey<FormState>();
+                          cubit.scaffoldKey.currentState?.showBottomSheet(
+                            (context) => Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Form(
+                                key: cubit.formKey,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    defaultFormField(
+                                      controller: cubit.quoteController,
+                                      type: TextInputType.text,
+                                      text: 'Quote',
+                                      textStyle:
+                                          cubit.isDark
+                                              ? TextStyle(color: Colors.white)
+                                              : TextStyle(color: Colors.black),
+                                      validate: (value) {
+                                        if (value.isEmpty) {
+                                          return 'Quote must not be empty';
+                                        }
+                                        return null;
+                                      },
+                                      prefix: Icons.format_quote,
+                                    ),
+                                    const SizedBox(height: 15.0),
+                                    defaultFormField(
+                                      type: TextInputType.text,
+                                      controller: cubit.authorController,
+                                      text: 'Author',
+                                      textStyle:
+                                          cubit.isDark
+                                              ? TextStyle(
+                                                // fontSize: 20.0,
+                                                // fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              )
+                                              : TextStyle(
+                                                // fontSize: 20.0,
+                                                // fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
+                                      validate: (value) {
+                                        if (value.isEmpty) {
+                                          return 'Author must not be empty';
+                                        }
+                                        return null;
+                                      },
+                                      prefix: Icons.person,
+                                    ),
+                                    // const SizedBox(
+                                    //   height: 20.0,
+                                    // ),
+                                    // ElevatedButton(
+                                    //   onPressed: (){
+                                    //     if(cubit.formKey.currentState?.validate()??false){
+                                    //       cubit.startEditingQuote(quoteModel);
+                                    //       Navigator.pop(context);
+                                    //     }
+                                    //   }, child: const Text('Save Changes'),
+                                    // ),
+                                    // const SizedBox(
+                                    //   height: 10.0,
+                                    // ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                        if (cubit.isBottomSheetShown) {
-                          if (cubit.formKey.currentState!.validate()) {
-                            if (kDebugMode) {
-                              print(
-                                'Update Icon onPressed =============-----------==. ',
+                          );
+                          if (cubit.isBottomSheetShown) {
+                            if (cubit.formKey.currentState!.validate()) {
+                              if (kDebugMode) {
+                                print(
+                                  'Update Icon onPressed =============-----------==. ',
+                                );
+                              }
+                              cubit.changeBottomSheetState(
+                                isShow: false,
+                                icon: Icons.edit,
                               );
-                            }
-                            cubit.changeBottomSheetState(
-                              isShow: false,
-                              icon: Icons.edit,
-                            );
 
-                            cubit.quoteController.clear();
-                            cubit.authorController.clear();
-                            if (!cubit.isBottomSheetShown) {}
+                              cubit.quoteController.clear();
+                              cubit.authorController.clear();
+                              if (!cubit.isBottomSheetShown) {}
+                            }
                           }
-                        }
-                      },
-                      icon: Icon(Icons.edit),
-                    ),
+                        },
+                        icon: Icon(Icons.edit),
+                      ),
 
                     // Delete Icon
                     IconButton(
@@ -863,29 +1213,44 @@ Widget buildQuoteItem(
       return false;
     },
     onDismissed: (direction) async {
+      // UserQuoteModel currentQuoteState=quoteModel;
       if (direction == DismissDirection.endToStart && allowArchiveSwipe) {
-        cubit.toggleArchiveStatus(quoteModel);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              quoteModel.isArchived
-                  ? "'${quoteModel.quoteText}'unarchived"
-                  : "'${quoteModel.quoteText}'archived",
-            ),
-          ),
+        print('Dismissible : Archiving quote ID ${quoteModel.quoteId}');
+        await cubit.toggleArchivedStatus(quoteModel);
+        print(
+          'Dismissible: toggleArchiveStatus completed for ${quoteModel.quoteId}',
         );
+        Future.microtask(() {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  quoteModel.isArchived
+                      ? "'${quoteModel.quoteText}'unarchived"
+                      : "'${quoteModel.quoteText}'archived",
+                ),
+              ),
+            );
+          }
+        });
       } else if (direction == DismissDirection.startToEnd &&
           allowUnarchiveSwipe) {
-        cubit.toggleArchiveStatus(quoteModel);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              quoteModel.isArchived
-                  ? "'${quoteModel.quoteText}'unarchived"
-                  : "'${quoteModel.quoteText}'archived",
-            ),
-          ),
+        print('Dismissible : Archiving quote ID ${quoteModel.quoteId}');
+        await cubit.toggleArchivedStatus(quoteModel);
+        print(
+          'Dismissible: toggleArchiveStatus completed for ${quoteModel.quoteId}',
         );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                quoteModel.isArchived
+                    ? "'${quoteModel.quoteText}'unarchived"
+                    : "'${quoteModel.quoteText}'archived",
+              ),
+            ),
+          );
+        }
       }
     },
   );

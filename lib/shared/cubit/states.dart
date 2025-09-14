@@ -71,3 +71,6 @@ class AccountDeletionFailureState extends AppStates{
 }
 
 class QuoteAppChangeModeState extends AppStates{}
+
+class QuoteSuccessfulState extends AppStates{}
+

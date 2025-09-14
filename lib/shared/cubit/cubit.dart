@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qute_app/shared/components/constants.dart';
 import 'package:qute_app/shared/cubit/states.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/quote_model.dart';
@@ -316,6 +317,46 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
+  Future <void> toggleArchivedStatus(UserQuoteModel quoteToToggle)async{
+    if(currentUser==null || currentUser!.userId==null){
+      emit(QuoteErrorState('Cannot toggle archive : User or Quote ID missing.'));
+      return ;
+    }
+
+    final originalIsArchived=quoteToToggle.isArchived;
+    final quoteId=quoteToToggle.quoteId;
+    if(originalIsArchived){
+      archivedUserQuotes.removeWhere((q)=>q.quoteId==quoteId);
+    }else{
+      quotes.removeWhere((q)=>q.quoteId==quoteId);
+    }
+    int quoteIndexInAll=allUserQuotes.indexWhere((q)=>q.quoteId==quoteId);
+    if(quoteIndexInAll!=-1){
+      allUserQuotes[quoteIndexInAll]=allUserQuotes[quoteIndexInAll].copyWith(isArchived: !originalIsArchived);
+    }
+    emit(QuoteSuccessfulState());
+    UserQuoteModel updatedQuote = quoteToToggle.copyWith(
+      isArchived: !originalIsArchived,
+    );
+    try{
+      int result=await quotesDb.updateUserQuote(updatedQuote);
+      if(result>0){
+        await loadUserQuotes();
+      }else{
+        emit(QuoteErrorState('Failed to update archive status in DB.'));
+        await loadUserQuotes();
+      }
+    }catch (e){
+      emit(QuoteErrorState('Error toggling archive : ${e.toString()}'));
+
+      await loadUserQuotes();
+    }
+
+  }
+
+
+
+  // toggleArchiveStatus ------- //
   Future<void> toggleArchiveStatus(UserQuoteModel quoteToToggle) async {
     if (currentUser == null || currentUser!.userId == null) {
       emit(QuoteErrorState('Cannot toggle archive: User or Quote ID missing.'));
@@ -386,6 +427,7 @@ class AppCubit extends Cubit<AppStates> {
               .toList();
       displayedQuotes =
           allUserQuotes.where((quote) => quote.isArchived != true).toList();
+      emit(QuoteSuccessfulState());
       if (kDebugMode) {
         print(
           'CUBIT loadUserQuotes:All :${allUserQuotes.length},displayed:${displayedQuotes.length},Favorites:${favoriteUserQuotes.length},Archived:${archivedUserQuotes.length}',

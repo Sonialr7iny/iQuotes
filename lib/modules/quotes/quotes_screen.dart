@@ -22,7 +22,7 @@ class QuotesScreen extends StatelessWidget {
         }
         AppCubit cubit = AppCubit.get(context);
         var quotes = cubit.displayedQuotes;
-        if (state is AppGetDatabaseLoadingState) {
+        if (state is AppGetDatabaseLoadingState ) {
           return Center(child: CircularProgressIndicator());
         }
         if (quotes.isEmpty) {
@@ -51,7 +51,15 @@ class QuotesScreen extends StatelessWidget {
 
         return Center(
           child: ListView.separated(
-            itemBuilder: (context, index) => buildQuoteItem(quotes[index],context,QuoteScreenContext.quotes),
+            itemBuilder: (context, index) {
+              final quote=quotes[index];
+              return QuoteListItem(
+                key: ValueKey<String>(quote.quoteId.toString()),
+                quoteModel: quote,
+                parentContext: context,
+               screenContext:  QuoteScreenContext.quotes
+            );
+            },
             separatorBuilder: (context, index) => SizedBox(height: 5),
             itemCount: quotes.length,
           ),
